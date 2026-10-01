@@ -4,6 +4,10 @@ const PRICES = {
   "Executive Purple": "4.99",
   "Professional Pro": "6.99",
   "Creative Green": "5.99",
+  "ATS Elite": "5.99",
+  "Tech Minimal": "7.99",
+  "Executive Minimal": "8.99",
+  "Portfolio Modern": "6.99",
 };
 
 function cors(res) {
