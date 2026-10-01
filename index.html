@@ -349,6 +349,15 @@
     <div class="modal-box">
       <div class="modal-head"><h3 id="modalTitle">Template Preview</h3><button class="close" id="closeModal" aria-label="Close">×</button></div>
       <p id="modalText" style="color:#667085;margin-top:6px"></p>
+      <div id="paymentBox" style="display:none;margin-top:18px;padding:18px;border:1px solid #e5e7eb;border-radius:14px;background:#f8fafc">
+        <h4 style="margin-bottom:10px">Choose payment method</h4>
+        <a id="paypalBtn" class="small-btn premium-btn" href="https://www.paypal.com/ncp/payment/8W5T9KR459KC2" target="_blank" rel="noopener" style="display:inline-flex;margin-right:8px">Pay with PayPal</a>
+        <button id="nagadBtn" class="small-btn" type="button" style="background:#059669">Pay with Nagad</button>
+        <div id="nagadInfo" style="display:none;margin-top:14px;padding:12px;background:#fff;border-radius:10px;border:1px solid #e5e7eb;font-size:14px;color:#475467">
+          <strong>Nagad:</strong> Send the template price to <strong>+8801816153953</strong>.<br>
+          After payment, keep your transaction ID and contact the site owner for the premium template file.
+        </div>
+      </div>
       <div class="modal-preview"><div class="cv-paper">
         <div class="cv-top"><div><div class="cv-name">YOUR NAME</div><div class="cv-role">YOUR PROFESSIONAL TITLE</div></div><div class="cv-avatar"></div></div>
         <div class="line blue short"></div><div class="line"></div><div class="line"></div><div class="line short"></div><br>
@@ -392,21 +401,30 @@
     const modal = document.getElementById("modal");
     const modalTitle = document.getElementById("modalTitle");
     const modalText = document.getElementById("modalText");
+    const paymentBox = document.getElementById("paymentBox");
+    const nagadBtn = document.getElementById("nagadBtn");
+    const nagadInfo = document.getElementById("nagadInfo");
 
     document.querySelectorAll("[data-preview]").forEach(btn => {
       btn.addEventListener("click", () => {
         modalTitle.textContent = btn.dataset.preview;
         modalText.textContent = "Preview of the " + btn.dataset.preview + " CV template.";
+        paymentBox.style.display = "none";
         modal.classList.add("show");
       });
     });
 
     document.querySelectorAll("[data-buy]").forEach(btn => {
       btn.addEventListener("click", () => {
-        alert(btn.dataset.buy + " is a premium template. Add your payment checkout link in the site code to enable payment and automatic delivery.");
+        modalTitle.textContent = "Buy " + btn.dataset.buy;
+        modalText.textContent = "Choose PayPal or Nagad to purchase this premium template.";
+        paymentBox.style.display = "block";
+        nagadInfo.style.display = "none";
+        modal.classList.add("show");
       });
     });
 
+    nagadBtn.addEventListener("click", () => { nagadInfo.style.display = nagadInfo.style.display === "none" ? "block" : "none"; });
     document.getElementById("closeModal").addEventListener("click", () => modal.classList.remove("show"));
     modal.addEventListener("click", e => { if (e.target === modal) modal.classList.remove("show"); });
     document.addEventListener("keydown", e => { if (e.key === "Escape") modal.classList.remove("show"); });
