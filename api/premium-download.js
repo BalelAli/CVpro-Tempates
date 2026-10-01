@@ -6,6 +6,10 @@ const FILES = {
   "Executive Purple": "executive-purple.html",
   "Professional Pro": "professional-pro.html",
   "Creative Green": "creative-green.html",
+  "ATS Elite": "ats-elite.rtf",
+  "Tech Minimal": "tech-minimal.rtf",
+  "Executive Minimal": "executive-minimal.rtf",
+  "Portfolio Modern": "portfolio-modern.rtf",
 };
 
 function verifyToken(token, template) {
