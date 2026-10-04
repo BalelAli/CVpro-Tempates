@@ -252,6 +252,8 @@
 .demo-paper.layout-creative .demo-grid{grid-template-columns:1.45fr .75fr}.demo-paper.layout-creative .demo-side{background:#f0fdf4;border:0;padding:18px}.demo-paper.layout-creative .cv-avatar{border-radius:18px}
 @media(max-width:700px){.demo-paper.layout-executive .demo-side,.demo-paper.layout-classic .demo-side{grid-template-columns:1fr}.demo-paper.layout-tech .demo-grid,.demo-paper.layout-portfolio .demo-grid,.demo-paper.layout-creative .demo-grid{grid-template-columns:1fr}.demo-paper.layout-tech .demo-side,.demo-paper.layout-portfolio .demo-main{border:0}.demo-paper.layout-portfolio .cv-top{margin:-22px -22px 18px}}
 </style>
+
+<script src="https://unpkg.com/docx@9.5.1/build/index.umd.js"></script>
 </head>
 
 <body>
@@ -316,7 +318,7 @@
               <div class="line blue short"></div><div class="line"></div><div class="line"></div><div class="line short"></div><br>
               <div class="line blue"></div><div class="line"></div><div class="line"></div>
             </div></div>
-            <div class="card-content"><div class="card-title"><h3>Modern Blue</h3><span class="tag">FREE</span></div><p>Clean and professional CV for modern job applications.</p><div class="card-bottom"><span class="price free">FREE</span><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="small-btn" style="background:#475467" data-preview="Modern Blue" data-theme="blue" data-role="Marketing Specialist">Preview</button><a class="small-btn" href="templates/modern-blue.rtf" download>Edit in Word</a></div></div></div>
+            <div class="card-content"><div class="card-title"><h3>Modern Blue</h3><span class="tag">FREE</span></div><p>Clean and professional CV for modern job applications.</p><div class="card-bottom"><span class="price free">FREE</span><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="small-btn" style="background:#475467" data-preview="Modern Blue" data-theme="blue" data-role="Marketing Specialist">Preview</button><button class="small-btn word-btn" data-word="Modern Blue">Download Word</button></div></div></div>
           </article>
 
           <article class="card template" data-type="premium" data-name="executive purple">
@@ -334,7 +336,7 @@
               <div class="line green short"></div><div class="line"></div><div class="line short"></div><br>
               <div class="line green"></div><div class="line"></div><div class="line"></div>
             </div></div>
-            <div class="card-content"><div class="card-title"><h3>Simple Green</h3><span class="tag">FREE</span></div><p>Simple, readable and ATS-friendly resume design.</p><div class="card-bottom"><span class="price free">FREE</span><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="small-btn" style="background:#475467" data-preview="Simple Green" data-theme="green" data-role="Product Designer">Preview</button><a class="small-btn" href="templates/simple-green.rtf" download>Edit in Word</a></div></div></div>
+            <div class="card-content"><div class="card-title"><h3>Simple Green</h3><span class="tag">FREE</span></div><p>Simple, readable and ATS-friendly resume design.</p><div class="card-bottom"><span class="price free">FREE</span><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="small-btn" style="background:#475467" data-preview="Simple Green" data-theme="green" data-role="Product Designer">Preview</button><button class="small-btn word-btn" data-word="Simple Green">Download Word</button></div></div></div>
           </article>
 
           <article class="card template" data-type="premium" data-name="professional pro">
@@ -352,7 +354,7 @@
               <div class="line blue"></div><div class="line"></div><div class="line short"></div><br>
               <div class="line blue"></div><div class="line"></div><div class="line"></div>
             </div></div>
-            <div class="card-content"><div class="card-title"><h3>Classic CV</h3><span class="tag">FREE</span></div><p>Traditional, focused and easy-to-read CV structure.</p><div class="card-bottom"><span class="price free">FREE</span><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="small-btn" style="background:#475467" data-preview="Classic CV" data-theme="blue" data-role="Software Engineer">Preview</button><a class="small-btn" href="templates/classic-cv.rtf" download>Edit in Word</a></div></div></div>
+            <div class="card-content"><div class="card-title"><h3>Classic CV</h3><span class="tag">FREE</span></div><p>Traditional, focused and easy-to-read CV structure.</p><div class="card-bottom"><span class="price free">FREE</span><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="small-btn" style="background:#475467" data-preview="Classic CV" data-theme="blue" data-role="Software Engineer">Preview</button><button class="small-btn word-btn" data-word="Classic CV">Download Word</button></div></div></div>
           </article>
 
           <article class="card template" data-type="premium" data-name="creative green">
@@ -504,8 +506,69 @@
     const nagadInfo = document.getElementById("nagadInfo");
     const transactionId = document.getElementById("transactionId");
     const submitNagad = document.getElementById("submitNagad");
-    const nagadStatus = document.getElementById("nagadStatus");
+    const nagadStatus = document.getElementById("nagadStatus");\n    const premiumWordBtn = document.getElementById("premiumWordBtn");
     let selectedPremiumTemplate = "";
+
+    // Real editable Microsoft Word (.docx) generator
+    const wordLayouts = {
+      "Modern Blue":"modern", "Simple Green":"ats", "Classic CV":"classic",
+      "Executive Purple":"executive", "Professional Pro":"corporate", "Creative Green":"creative"
+    };
+    const wordColors = {blue:"2563EB", purple:"7C3AED", green:"059669", black:"111827"};
+
+    function downloadDocx(templateName){
+      if(!window.docx){ alert("Word generator is still loading. Please try again."); return; }
+      const D=window.docx;
+      const layout=wordLayouts[templateName]||"modern";
+      const accent = templateName==="Creative Green" ? wordColors.green :
+                     (templateName==="Executive Purple"||templateName==="Professional Pro") ? wordColors.purple :
+                     templateName==="Classic CV" ? wordColors.black : wordColors.blue;
+      const p=(text,opts={})=>new D.Paragraph({text,spacing:{after:90},...opts});
+      const heading=(text)=>new D.Paragraph({text,heading:D.HeadingLevel.HEADING_2,spacing:{before:220,after:80},thematicBreak:true});
+      const children=[];
+      if(layout==="classic"||layout==="executive"){
+        children.push(new D.Paragraph({text:"YOUR NAME",alignment:D.AlignmentType.CENTER,style:"Title"}));
+        children.push(new D.Paragraph({text:"PROFESSIONAL TITLE",alignment:D.AlignmentType.CENTER}));
+        children.push(p("City, Country  |  +880 1XXX XXX XXX  |  email@example.com  |  LinkedIn",{alignment:D.AlignmentType.CENTER}));
+      }else if(layout==="tech"){
+        children.push(p("YOUR NAME",{bold:true,size:34,color:accent}));
+        children.push(p("SOFTWARE ENGINEER | GitHub | LinkedIn"));
+      }else{
+        children.push(p("YOUR NAME",{bold:true,size:36,color:accent}));
+        children.push(p("PROFESSIONAL TITLE",{bold:true,color:"667085"}));
+        children.push(p("City, Country  |  +880 1XXX XXX XXX  |  email@example.com  |  LinkedIn"));
+      }
+      children.push(heading("PROFILE"));
+      children.push(p("Results-focused professional with strong experience, practical skills and a clear track record of delivering measurable outcomes."));
+      children.push(heading("EXPERIENCE"));
+      children.push(p("Senior Professional — Company Name",{bold:true}));
+      children.push(p("2022 — Present",{italics:true,color:"667085"}));
+      children.push(p("• Delivered measurable improvements across key projects.\n• Led teams, stakeholders and day-to-day execution.\n• Improved quality, efficiency or business results."));
+      children.push(p("Professional — Previous Company",{bold:true}));
+      children.push(p("2019 — 2022",{italics:true,color:"667085"}));
+      children.push(p("• Managed responsibilities and delivered strong results.\n• Supported projects and process improvements."));
+      children.push(heading("EDUCATION"));
+      children.push(p("Degree / Major — University Name",{bold:true}));
+      children.push(p("2015 — 2019",{italics:true,color:"667085"}));
+      children.push(heading("SKILLS"));
+      children.push(p("Leadership • Communication • Problem Solving • Project Management • MS Office / Tools • Industry Skills"));
+      children.push(heading("CERTIFICATIONS"));
+      children.push(p("Certification Name • Training / Course"));
+      children.push(heading("LANGUAGES"));
+      children.push(p("English — Professional • Bangla — Native"));
+      const doc=new D.Document({sections:[{properties:{page:{margin:{top:720,right:720,bottom:720,left:720}}},children}]});
+      D.Packer.toBlob(doc).then(blob=>{
+        const a=document.createElement("a");
+        a.href=URL.createObjectURL(blob);
+        a.download=templateName.replace(/[^a-z0-9]+/gi,"-").toLowerCase()+"-cv.docx";
+        a.click();
+        setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+      });
+    }
+
+    document.querySelectorAll(".word-btn").forEach(btn=>{
+      btn.addEventListener("click",()=>downloadDocx(btn.dataset.word));
+    });
 
     document.querySelectorAll("[data-preview]").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -575,7 +638,7 @@
       transactionId.value = "";
     });
 
-    submitNagad.addEventListener("click", () => {
+    premiumWordBtn.addEventListener("click", () => { if(selectedPremiumTemplate) downloadDocx(selectedPremiumTemplate); });\n\n    submitNagad.addEventListener("click", () => {
       const id = transactionId.value.trim();
       if (!id) {
         nagadStatus.textContent = "Please enter your Nagad Transaction ID.";
