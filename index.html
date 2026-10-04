@@ -242,6 +242,15 @@
 .demo-paper{width:100%;max-width:760px;min-height:720px;padding:34px 38px!important;box-sizing:border-box;text-align:left;background:#fff;box-shadow:0 12px 30px rgba(15,23,42,.14)}
 .demo-paper .cv-top{margin-bottom:18px}.demo-contact{font-size:10px;color:#667085;margin-top:7px;line-height:1.5}.demo-grid{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:28px}.demo-heading{font-size:12px;font-weight:800;letter-spacing:.7px;color:#2563eb;border-bottom:2px solid #e5e7eb;padding-bottom:5px;margin:17px 0 8px}.demo-copy,.demo-line{font-size:10px;line-height:1.55;color:#667085}.demo-job{font-size:11px;font-weight:700;color:#111827;margin-top:9px}.demo-date{font-size:9px;color:#98a2b3;margin:2px 0 4px}.demo-side{border-left:1px solid #e5e7eb;padding-left:18px}.demo-side .demo-heading:first-child{margin-top:0}
 @media(max-width:700px){.demo-paper{min-height:620px;padding:22px!important}.demo-grid{grid-template-columns:1fr}.demo-side{border-left:0;border-top:1px solid #e5e7eb;padding:8px 0 0}.demo-paper .cv-name{font-size:24px}}
+
+/* Distinct template preview layouts */
+.demo-paper.layout-ats .demo-grid{display:block}.demo-paper.layout-ats .demo-side{display:none}.demo-paper.layout-ats .demo-heading{color:#111827!important;border-color:#111827!important}.demo-paper.layout-ats .cv-avatar{display:none}.demo-paper.layout-ats .cv-top{display:block}.demo-paper.layout-ats .cv-name,.demo-paper.layout-ats .cv-role{text-align:left}
+.demo-paper.layout-tech{font-family:Consolas,monospace}.demo-paper.layout-tech .cv-top{display:block;border-bottom:0}.demo-paper.layout-tech .demo-grid{grid-template-columns:185px 1fr}.demo-paper.layout-tech .demo-side{order:-1;background:#f8fafc;border-left:0;border-right:1px solid #e5e7eb;padding:16px}.demo-paper.layout-tech .demo-side .demo-heading{font-size:10px}.demo-paper.layout-tech .cv-avatar{display:none}.demo-paper.layout-tech .cv-name{letter-spacing:1px}
+.demo-paper.layout-executive .cv-top{display:block;text-align:center;padding-bottom:8px}.demo-paper.layout-executive .cv-name,.demo-paper.layout-executive .cv-role,.demo-paper.layout-executive .demo-contact{text-align:center}.demo-paper.layout-executive .cv-avatar{display:none}.demo-paper.layout-executive .demo-grid{display:block}.demo-paper.layout-executive .demo-side{border:0;border-top:1px solid #e5e7eb;padding:10px 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.demo-paper.layout-executive .demo-side .demo-heading{margin-top:0}
+.demo-paper.layout-portfolio .cv-top{background:#f8fafc;padding:18px;margin:-34px -38px 18px;border-bottom:1px solid #e5e7eb}.demo-paper.layout-portfolio .demo-grid{grid-template-columns:1fr 1fr}.demo-paper.layout-portfolio .demo-main{border-right:1px solid #e5e7eb;padding-right:20px}.demo-paper.layout-portfolio .demo-side{border-left:0;padding-left:0}.demo-paper.layout-portfolio .demo-heading{letter-spacing:1px}
+.demo-paper.layout-classic{font-family:"Times New Roman",serif}.demo-paper.layout-classic .cv-top{text-align:center;display:block}.demo-paper.layout-classic .cv-name,.demo-paper.layout-classic .cv-role,.demo-paper.layout-classic .demo-contact{text-align:center}.demo-paper.layout-classic .cv-avatar{display:none}.demo-paper.layout-classic .demo-grid{display:block}.demo-paper.layout-classic .demo-side{border:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.demo-paper.layout-creative .demo-grid{grid-template-columns:1.45fr .75fr}.demo-paper.layout-creative .demo-side{background:#f0fdf4;border:0;padding:18px}.demo-paper.layout-creative .cv-avatar{border-radius:18px}
+@media(max-width:700px){.demo-paper.layout-executive .demo-side,.demo-paper.layout-classic .demo-side{grid-template-columns:1fr}.demo-paper.layout-tech .demo-grid,.demo-paper.layout-portfolio .demo-grid,.demo-paper.layout-creative .demo-grid{grid-template-columns:1fr}.demo-paper.layout-tech .demo-side,.demo-paper.layout-portfolio .demo-main{border:0}.demo-paper.layout-portfolio .cv-top{margin:-22px -22px 18px}}
 </style>
 </head>
 
@@ -521,13 +530,20 @@
         const role = btn.dataset.role || "Professional";
         const colors = {blue:"#2563eb", purple:"#7c3aed", green:"#059669"};
         const accentColor = colors[theme] || colors.blue;
+        const layoutMap = {
+          "Modern Blue":"modern", "Simple Green":"ats", "Classic CV":"classic",
+          "Executive Purple":"executive", "Professional Pro":"corporate", "Creative Green":"creative",
+          "ATS Elite":"ats", "Tech Minimal":"tech", "Executive Minimal":"executive", "Portfolio Modern":"portfolio"
+        };
+        const layout = layoutMap[name] || "modern";
+        const cv = document.getElementById("modalCv");
+        cv.className = "cv-paper demo-paper layout-" + layout;
         modalTitle.textContent = name + " — Full Demo Preview";
-        modalText.textContent = "Preview the complete CV layout before downloading or purchasing. Demo text is replaceable with the customer's own details.";
+        modalText.textContent = "এই template-এর আসল layout দেখুন। Demo content পরে আপনার নিজের তথ্য দিয়ে replace করা যাবে.";
         paymentBox.style.display = "none";
         document.getElementById("modalCvName").textContent = "YOUR NAME";
         document.getElementById("modalCvRole").textContent = role.toUpperCase();
-        document.querySelectorAll("#modalCv .demo-heading").forEach(h => h.style.color = accentColor);
-        document.querySelectorAll("#modalCv .demo-heading").forEach(h => h.style.borderColor = accentColor);
+        document.querySelectorAll("#modalCv .demo-heading").forEach(h => { h.style.color = accentColor; h.style.borderColor = accentColor; });
         modal.classList.add("show");
       });
     });
