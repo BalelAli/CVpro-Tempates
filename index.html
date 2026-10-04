@@ -217,8 +217,7 @@
     .modal-box{
       width:min(560px,100%);background:#fff;border-radius:18px;padding:25px;
       box-shadow:0 25px 70px rgba(0,0,0,.25)
-    }
-    .modal-head{display:flex;justify-content:space-between;gap:15px;align-items:center}
+    }    .modal-head{display:flex;justify-content:space-between;gap:15px;align-items:center}
     .close{border:0;background:#f1f5f9;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px}
     .modal-preview{margin-top:20px;background:#f1f5f9;border-radius:12px;padding:20px}
     .modal-preview .cv-paper{height:310px}
@@ -284,7 +283,96 @@
 .demo-paper.layout-classic{font-family:"Times New Roman",serif}.demo-paper.layout-classic .cv-top{text-align:center;display:block}.demo-paper.layout-classic .cv-name,.demo-paper.layout-classic .cv-role,.demo-paper.layout-classic .demo-contact{text-align:center}.demo-paper.layout-classic .cv-avatar{display:none}.demo-paper.layout-classic .demo-grid{display:block}.demo-paper.layout-classic .demo-side{border:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .demo-paper.layout-creative .demo-grid{grid-template-columns:1.45fr .75fr}.demo-paper.layout-creative .demo-side{background:#f0fdf4;border:0;padding:18px}.demo-paper.layout-creative .cv-avatar{border-radius:18px}
 @media(max-width:700px){.demo-paper.layout-executive .demo-side,.demo-paper.layout-classic .demo-side{grid-template-columns:1fr}.demo-paper.layout-tech .demo-grid,.demo-paper.layout-portfolio .demo-grid,.demo-paper.layout-creative .demo-grid{grid-template-columns:1fr}.demo-paper.layout-tech .demo-side,.demo-paper.layout-portfolio .demo-main{border:0}.demo-paper.layout-portfolio .cv-top{margin:-22px -22px 18px}}
-</style>
+
+/* FINAL OVERRIDE: make the six template structures unmistakably different */
+.preview{height:300px}
+.card-layout-modern{position:relative;padding:18px 18px 18px 72px!important}
+.card-layout-modern:before{content:"";position:absolute;left:18px;top:18px;bottom:18px;width:38px;background:#eff6ff;border-right:3px solid #2563eb}
+.card-layout-modern .cv-top{display:block;border-bottom:0;padding-bottom:0}
+.card-layout-modern .cv-avatar{position:absolute;left:24px;top:30px;width:26px;height:26px;border-radius:50%;background:#2563eb}
+.card-layout-modern .cv-name{font-size:16px}
+.card-layout-modern .line.blue{background:#2563eb}
+
+.card-layout-executive{padding:24px!important;font-family:Georgia,serif}
+.card-layout-executive .cv-top{display:block;text-align:center;border-bottom:1px solid #c4b5fd;padding-bottom:12px}
+.card-layout-executive .cv-name{font-size:20px;letter-spacing:.5px}
+.card-layout-executive .cv-role{font-size:9px;color:#7c3aed}
+.card-layout-executive .line{height:3px;border-radius:0;background:#ddd}
+.card-layout-executive .line.purple{width:28%!important;background:#7c3aed;margin:9px auto}
+.card-layout-executive:after{content:"EXECUTIVE PROFILE  •  EXPERIENCE  •  EDUCATION";display:block;text-align:center;font:700 6px Georgia,serif;color:#7c3aed;margin-top:12px;letter-spacing:1px}
+
+.card-layout-ats{padding:18px!important}
+.card-layout-ats .cv-top{display:block;border:0;border-left:5px solid #059669;background:#f0fdf4;padding:10px 12px;margin:-2px -2px 12px}
+.card-layout-ats .cv-name{font-size:17px}
+.card-layout-ats .cv-role{font-size:8px;color:#475467}
+.card-layout-ats .line{height:4px;border-radius:0;background:#cbd5e1}
+.card-layout-ats .line.green{height:5px}
+.card-layout-ats .short{width:100%}
+
+.card-layout-corporate{padding:18px!important}
+.card-layout-corporate .cv-top{display:flex;flex-direction:row-reverse;align-items:center;border-bottom:4px solid #111827;padding-bottom:10px}
+.card-layout-corporate .cv-avatar{width:52px;height:52px;border-radius:3px;background:#111827}
+.card-layout-corporate .cv-name{text-transform:uppercase;letter-spacing:1px}
+.card-layout-corporate .cv-role{color:#111827}
+.card-layout-corporate:after{content:"KEY SKILLS    EXPERIENCE    EDUCATION    RESULTS";display:block;background:#111827;color:#fff;font-size:6px;font-weight:800;letter-spacing:1px;padding:6px;margin-top:10px}
+.card-layout-corporate .line{border-radius:0;height:5px}
+
+.card-layout-classic{padding:20px!important;font-family:"Times New Roman",serif;border:1px solid #bbb}
+.card-layout-classic .cv-top{display:block;text-align:center;border-bottom:1px double #333;padding-bottom:10px}
+.card-layout-classic .cv-name{font-size:19px;text-transform:uppercase;letter-spacing:.7px}
+.card-layout-classic .cv-role{font-size:9px}
+.card-layout-classic .cv-avatar{display:none}
+.card-layout-classic .line{height:2px;border-radius:0;background:#444}
+.card-layout-classic .line.blue{background:#111}
+.card-layout-classic .line.short{width:70%}
+
+.card-layout-creative{padding:18px 18px 18px 58px!important;background:#fafffc}
+.card-layout-creative .cv-top{display:block;background:#dcfce7;margin:-18px -18px 12px -58px;padding:18px 18px 14px 58px;min-height:62px}
+.card-layout-creative .cv-avatar{position:absolute;left:18px;top:28px;width:32px;height:32px;border-radius:12px;background:#16a34a}
+.card-layout-creative .cv-name{font-size:17px;color:#166534}
+.card-layout-creative:before{content:"";position:absolute;left:18px;top:18px;bottom:18px;width:8px;background:#16a34a;border-radius:8px}
+.card-layout-creative .line{height:7px;border-radius:3px;background:#d1fae5}
+.card-layout-creative .line.green{background:#16a34a}
+
+/* Full modal demos: radically different information architecture */
+.demo-paper.layout-modern{padding:34px 38px 34px 112px!important;position:relative}
+.demo-paper.layout-modern:before{content:"";position:absolute;left:38px;top:34px;bottom:34px;width:52px;background:#eff6ff;border-right:4px solid #2563eb}
+.demo-paper.layout-modern .cv-avatar{position:absolute;left:51px;top:55px;width:30px;height:30px;background:#2563eb}
+.demo-paper.layout-modern .demo-grid{grid-template-columns:1fr 190px}
+.demo-paper.layout-modern .demo-side{background:#f8fafc;padding:16px;border-left:0}
+
+.demo-paper.layout-executive{font-family:Georgia,serif;text-align:center}
+.demo-paper.layout-executive .cv-top{border-bottom:2px solid #7c3aed}
+.demo-paper.layout-executive .demo-grid{display:block}
+.demo-paper.layout-executive .demo-main{text-align:left}
+.demo-paper.layout-executive .demo-side{display:grid;grid-template-columns:repeat(3,1fr);border:0;background:#faf5ff;padding:18px;text-align:left}
+
+.demo-paper.layout-ats{border-top:10px solid #059669}
+.demo-paper.layout-ats .cv-top{border-left:8px solid #059669;background:#f0fdf4;padding:16px}
+.demo-paper.layout-ats .demo-grid{display:block}
+.demo-paper.layout-ats .demo-side{display:none}
+.demo-paper.layout-ats .demo-heading{color:#111827!important;border-color:#111827!important}
+
+.demo-paper.layout-corporate{padding:32px!important}
+.demo-paper.layout-corporate .cv-top{background:#111827;color:#fff;padding:22px;margin:-32px -32px 22px;display:flex;flex-direction:row-reverse}
+.demo-paper.layout-corporate .cv-name,.demo-paper.layout-corporate .cv-role,.demo-paper.layout-corporate .demo-contact{color:#fff}
+.demo-paper.layout-corporate .demo-grid{grid-template-columns:1fr 230px}
+.demo-paper.layout-corporate .demo-side{background:#f3f4f6;border:0;padding:20px}
+.demo-paper.layout-corporate .demo-heading{color:#111827!important;border-color:#111827!important}
+
+.demo-paper.layout-classic{font-family:"Times New Roman",serif;border:1px solid #999;padding:38px!important}
+.demo-paper.layout-classic .cv-top{text-align:center;display:block;border-bottom:3px double #333;padding-bottom:14px}
+.demo-paper.layout-classic .demo-grid{display:block}
+.demo-paper.layout-classic .demo-side{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #333;padding-top:12px;border-left:0}
+.demo-paper.layout-classic .demo-heading{color:#111827!important;border-color:#111827!important;text-transform:uppercase}
+
+.demo-paper.layout-creative{padding:0!important;background:#f7fff9}
+.demo-paper.layout-creative .cv-top{background:#166534;color:#fff;padding:34px 38px;margin:0}
+.demo-paper.layout-creative .cv-name,.demo-paper.layout-creative .cv-role,.demo-paper.layout-creative .demo-contact{color:#fff}
+.demo-paper.layout-creative .demo-grid{grid-template-columns:1.4fr .7fr;padding:28px 38px}
+.demo-paper.layout-creative .demo-side{background:#dcfce7;border:0;padding:20px;border-radius:14px}
+.demo-paper.layout-creative .demo-heading{color:#166534!important;border-color:#16a34a!important}
+\n</style>
 
 <script src="https://unpkg.com/docx@9.5.1/build/index.umd.js"></script>
 </head>
@@ -437,8 +525,7 @@
     </section>
 
     <section class="about" id="about">
-      <div class="container">
-        <div class="about-box">
+      <div class="container">        <div class="about-box">
           <div class="eyebrow">About CVPro</div>
           <h2>Professional CVs without the hassle.</h2>
           <p>CVPro Templates helps job seekers create modern, professional and ATS-friendly CVs quickly. Explore free and premium designs made for different careers and experience levels.</p>
