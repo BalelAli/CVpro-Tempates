@@ -439,7 +439,7 @@
           </div>
         </div>
       </div>
-      <div class="modal-preview"><div class="cv-paper demo-paper" id="modalCv">
+        <button id="premiumWordBtn" type="button" class="small-btn premium-btn" style="margin-top:12px;width:100%">Download Editable Word (.docx)</button>\n      <div class="modal-preview"><div class="cv-paper demo-paper" id="modalCv">
         <div class="cv-top"><div><div class="cv-name" id="modalCvName">YOUR NAME</div><div class="cv-role" id="modalCvRole">PROFESSIONAL TITLE</div><div class="demo-contact">City, Country &nbsp;|&nbsp; +880 1XXX XXX XXX &nbsp;|&nbsp; email@example.com &nbsp;|&nbsp; LinkedIn</div></div><div class="cv-avatar"></div></div>
         <div class="demo-grid">
           <div class="demo-main">
@@ -506,64 +506,46 @@
     const nagadInfo = document.getElementById("nagadInfo");
     const transactionId = document.getElementById("transactionId");
     const submitNagad = document.getElementById("submitNagad");
-    const nagadStatus = document.getElementById("nagadStatus");\n    const premiumWordBtn = document.getElementById("premiumWordBtn");
+    const nagadStatus = document.getElementById("nagadStatus");
     let selectedPremiumTemplate = "";
 
-    // Real editable Microsoft Word (.docx) generator
-    const wordLayouts = {
-      "Modern Blue":"modern", "Simple Green":"ats", "Classic CV":"classic",
-      "Executive Purple":"executive", "Professional Pro":"corporate", "Creative Green":"creative"
-    };
-    const wordColors = {blue:"2563EB", purple:"7C3AED", green:"059669", black:"111827"};
+    // Real editable Microsoft Word (.docx) generator — six genuinely different Word layouts
+    const wordLayouts={"Modern Blue":"modern","Executive Purple":"executive","Simple Green":"ats","Professional Pro":"corporate","Classic CV":"classic","Creative Green":"creative"};
 
     function downloadDocx(templateName){
-      if(!window.docx){ alert("Word generator is still loading. Please try again."); return; }
-      const D=window.docx;
+      if(!window.docx){alert("Word generator is still loading. Please try again.");return;}
+      const D=window.docx, blue="2563EB", purple="7C3AED", green="059669", ink="111827", muted="667085", light="F3F4F6";
       const layout=wordLayouts[templateName]||"modern";
-      const accent = templateName==="Creative Green" ? wordColors.green :
-                     (templateName==="Executive Purple"||templateName==="Professional Pro") ? wordColors.purple :
-                     templateName==="Classic CV" ? wordColors.black : wordColors.blue;
-      const p=(text,opts={})=>new D.Paragraph({text,spacing:{after:90},...opts});
-      const heading=(text)=>new D.Paragraph({text,heading:D.HeadingLevel.HEADING_2,spacing:{before:220,after:80},thematicBreak:true});
-      const children=[];
-      if(layout==="classic"||layout==="executive"){
-        children.push(new D.Paragraph({text:"YOUR NAME",alignment:D.AlignmentType.CENTER,style:"Title"}));
-        children.push(new D.Paragraph({text:"PROFESSIONAL TITLE",alignment:D.AlignmentType.CENTER}));
-        children.push(p("City, Country  |  +880 1XXX XXX XXX  |  email@example.com  |  LinkedIn",{alignment:D.AlignmentType.CENTER}));
-      }else if(layout==="tech"){
-        children.push(p("YOUR NAME",{bold:true,size:34,color:accent}));
-        children.push(p("SOFTWARE ENGINEER | GitHub | LinkedIn"));
-      }else{
-        children.push(p("YOUR NAME",{bold:true,size:36,color:accent}));
-        children.push(p("PROFESSIONAL TITLE",{bold:true,color:"667085"}));
-        children.push(p("City, Country  |  +880 1XXX XXX XXX  |  email@example.com  |  LinkedIn"));
+      const accent=layout==="executive"?purple:(layout==="creative"||layout==="ats")?green:(layout==="classic"||layout==="corporate")?ink:blue;
+      const tx=(v,o={})=>new D.TextRun({text:String(v),font:o.font||"Aptos",size:o.size||20,bold:!!o.bold,italics:!!o.italics,color:o.color||ink});
+      const p=(v,o={})=>new D.Paragraph({children:Array.isArray(v)?v:[tx(v,o)],spacing:{after:o.after===undefined?75:o.after,before:o.before||0},alignment:o.alignment});
+      const sec=(v,c=accent)=>new D.Paragraph({children:[tx(v,{size:20,bold:true,color:c})],spacing:{before:170,after:65},border:{bottom:{style:D.BorderStyle.SINGLE,size:8,color:c}}});
+      const bullet=v=>p("• "+v,{size:18,after:35});
+      const title=(name,role,c=accent,a=D.AlignmentType.LEFT)=>new D.Paragraph({children:[tx(name,{size:34,bold:true,color:c}),tx("\n"+role,{size:18,bold:true,color:muted})],alignment:a,spacing:{after:80}});
+      const body=()=>[
+        sec("PROFILE"),p("Results-focused professional with strong experience, practical skills and a clear record of delivering measurable outcomes."),
+        sec("EXPERIENCE"),p([tx("Senior Professional — Company Name",{bold:true,size:19})]),p("2022 — Present",{italics:true,color:muted}),bullet("Delivered measurable improvements across key projects."),bullet("Led teams, stakeholders and day-to-day execution."),bullet("Improved quality, efficiency or business results."),
+        p([tx("Professional — Previous Company",{bold:true,size:19})]),p("2019 — 2022",{italics:true,color:muted}),bullet("Managed responsibilities and delivered strong results."),bullet("Supported projects and process improvements."),
+        sec("EDUCATION"),p([tx("Degree / Major — University Name",{bold:true,size:19})]),p("2015 — 2019",{italics:true,color:muted})
+      ];
+      const twoCol=(left,right,width=280)=>new D.Table({width:{size:100,type:D.WidthType.PERCENTAGE},borders:{top:{style:D.BorderStyle.NONE,size:0,color:"FFFFFF"},bottom:{style:D.BorderStyle.NONE,size:0,color:"FFFFFF"},left:{style:D.BorderStyle.NONE,size:0,color:"FFFFFF"},right:{style:D.BorderStyle.NONE,size:0,color:"FFFFFF"},insideVertical:{style:D.BorderStyle.SINGLE,size:6,color:"E5E7EB"}},rows:[new D.TableRow({children:[new D.TableCell({width:{size:100-width,type:D.WidthType.PERCENTAGE},margins:{right:160},children:left}),new D.TableCell({width:{size:width,type:D.WidthType.PERCENTAGE},shading:{fill:light},margins:{left:160,right:140},children:right})]})]});
+
+      let children;
+      if(layout==="modern"){
+        children=[title("YOUR NAME","MARKETING SPECIALIST",blue),p("City, Country  |  +880 1XXX XXX XXX  |  email@example.com"),twoCol(body(),[sec("SKILLS",blue),p("Leadership\nCommunication\nProblem Solving\nProject Management\nMS Office / Tools"),sec("CERTIFICATIONS",blue),p("Certification Name\nTraining / Course"),sec("LANGUAGES",blue),p("English — Professional\nBangla — Native")],280)];
+      } else if(layout==="executive"){
+        children=[title("YOUR NAME","SENIOR MANAGER",purple,D.AlignmentType.CENTER),p("City, Country  •  +880 1XXX XXX XXX  •  email@example.com  •  LinkedIn",{alignment:D.AlignmentType.CENTER}),sec("EXECUTIVE PROFILE",purple),p("Strategic leader experienced in teams, business priorities, stakeholders and high-impact initiatives."),sec("CAREER HIGHLIGHTS",purple),bullet("Led cross-functional teams and delivered measurable business results."),bullet("Improved operational efficiency and customer outcomes."),bullet("Built strong relationships with senior stakeholders."),sec("PROFESSIONAL EXPERIENCE",purple),p([tx("Senior Manager — Company Name",{bold:true,size:20})]),p("2022 — Present",{italics:true,color:muted}),bullet("Owned strategic initiatives, budgets and team performance."),p([tx("Manager — Previous Company",{bold:true,size:20})]),p("2019 — 2022",{italics:true,color:muted}),bullet("Managed projects, people and business operations."),sec("EDUCATION & CREDENTIALS",purple),p("MBA / Degree — University Name\nCertification Name\nEnglish — Professional | Bangla — Native")];
+      } else if(layout==="ats"){
+        children=[title("YOUR NAME","PROFESSIONAL TITLE",green),p("City, Country | +880 1XXX XXX XXX | email@example.com | LinkedIn"),sec("SUMMARY",green),p("Clear, keyword-friendly professional summary tailored to the target job and industry."),sec("CORE SKILLS",green),p("Leadership | Communication | Project Management | Problem Solving | Microsoft Office | Industry Skills"),sec("PROFESSIONAL EXPERIENCE",green),p([tx("Senior Professional — Company Name",{bold:true,size:20})]),p("2022 — Present"),bullet("Achievement with measurable result and relevant keyword."),bullet("Responsibility directly related to the target role."),p([tx("Professional — Previous Company",{bold:true,size:20})]),p("2019 — 2022"),bullet("Achievement with measurable result."),bullet("Relevant responsibility and contribution."),sec("EDUCATION",green),p("Degree / Major — University Name | 2015 — 2019"),sec("CERTIFICATIONS",green),p("Certification Name | Training / Course"),sec("LANGUAGES",green),p("English — Professional | Bangla — Native")];
+      } else if(layout==="corporate"){
+        children=[p([tx("YOUR NAME",{size:34,bold:true,color:ink}),tx("   |   FINANCE DIRECTOR",{size:18,bold:true,color:ink})]),p("City, Country  |  +880 1XXX XXX XXX  |  email@example.com"),new D.Paragraph({border:{bottom:{style:D.BorderStyle.SINGLE,size:18,color:ink}},spacing:{after:100}}),twoCol([sec("PROFESSIONAL SUMMARY",ink),p("Corporate leader experienced in finance, operations, strategy, governance and performance improvement."),sec("EXPERIENCE",ink),p([tx("Finance Director — Company Name",{bold:true,size:20})]),p("2022 — Present"),bullet("Directed financial planning, reporting and business performance."),bullet("Partnered with leadership on strategic decisions."),p([tx("Finance Manager — Previous Company",{bold:true,size:20})]),p("2019 — 2022"),bullet("Managed reporting, controls and process improvements."),sec("EDUCATION",ink),p("MBA / BBA — University Name")],[sec("KEY SKILLS",ink),p("Financial Strategy\nLeadership\nBudgeting\nRisk Management\nReporting"),sec("TOOLS",ink),p("Excel\nERP / Accounting\nPowerPoint"),sec("LANGUAGES",ink),p("English — Professional\nBangla — Native")],300)];
+      } else if(layout==="classic"){
+        children=[title("YOUR NAME","CURRICULUM VITAE",ink,D.AlignmentType.CENTER),p("City, Country  |  Phone  |  Email  |  LinkedIn",{alignment:D.AlignmentType.CENTER}),sec("PERSONAL PROFILE",ink),p("Professional profile written in a traditional, formal CV style."),sec("EMPLOYMENT HISTORY",ink),p([tx("Senior Professional — Company Name",{bold:true,size:20})]),p("2022 — Present"),bullet("Key responsibility and achievement."),bullet("Key contribution and measurable outcome."),p([tx("Professional — Previous Company",{bold:true,size:20})]),p("2019 — 2022"),bullet("Key responsibility and achievement."),sec("EDUCATION",ink),p("Degree / Major — University Name\n2015 — 2019"),twoCol([sec("SKILLS",ink),p("Leadership\nCommunication\nMS Office\nProject Management")],[sec("REFERENCES",ink),p("Available on request")],500)];
+      } else {
+        children=[twoCol([title("YOUR NAME","CREATIVE DIRECTOR",green),sec("ABOUT",green),p("Creative professional focused on ideas, visual communication and memorable brand experiences."),sec("SKILLS",green),p("Branding\nDesign\nContent\nCreative Strategy\nPresentation"),sec("CONTACT",green),p("Phone\nEmail\nLinkedIn")],[sec("EXPERIENCE",green),p([tx("Creative Director — Studio Name",{bold:true,size:20})]),p("2022 — Present"),bullet("Led creative direction for major campaigns."),bullet("Developed concepts and guided creative teams."),p([tx("Designer — Previous Studio",{bold:true,size:20})]),p("2019 — 2022"),bullet("Created visual systems and campaign assets."),sec("PROJECTS",green),p("Brand Identity — Project Name\nCampaign Design — Project Name\nDigital Experience — Project Name"),sec("EDUCATION",green),p("Degree / Major — University Name")],420)];
       }
-      children.push(heading("PROFILE"));
-      children.push(p("Results-focused professional with strong experience, practical skills and a clear track record of delivering measurable outcomes."));
-      children.push(heading("EXPERIENCE"));
-      children.push(p("Senior Professional — Company Name",{bold:true}));
-      children.push(p("2022 — Present",{italics:true,color:"667085"}));
-      children.push(p("• Delivered measurable improvements across key projects.\n• Led teams, stakeholders and day-to-day execution.\n• Improved quality, efficiency or business results."));
-      children.push(p("Professional — Previous Company",{bold:true}));
-      children.push(p("2019 — 2022",{italics:true,color:"667085"}));
-      children.push(p("• Managed responsibilities and delivered strong results.\n• Supported projects and process improvements."));
-      children.push(heading("EDUCATION"));
-      children.push(p("Degree / Major — University Name",{bold:true}));
-      children.push(p("2015 — 2019",{italics:true,color:"667085"}));
-      children.push(heading("SKILLS"));
-      children.push(p("Leadership • Communication • Problem Solving • Project Management • MS Office / Tools • Industry Skills"));
-      children.push(heading("CERTIFICATIONS"));
-      children.push(p("Certification Name • Training / Course"));
-      children.push(heading("LANGUAGES"));
-      children.push(p("English — Professional • Bangla — Native"));
-      const doc=new D.Document({sections:[{properties:{page:{margin:{top:720,right:720,bottom:720,left:720}}},children}]});
-      D.Packer.toBlob(doc).then(blob=>{
-        const a=document.createElement("a");
-        a.href=URL.createObjectURL(blob);
-        a.download=templateName.replace(/[^a-z0-9]+/gi,"-").toLowerCase()+"-cv.docx";
-        a.click();
-        setTimeout(()=>URL.revokeObjectURL(a.href),1500);
-      });
+      const doc=new D.Document({sections:[{properties:{page:{margin:{top:650,right:650,bottom:650,left:650}}},children}]});
+      D.Packer.toBlob(doc).then(blob=>{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=templateName.replace(/[^a-z0-9]+/gi,"-").toLowerCase()+"-cv.docx";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500);});
     }
 
     document.querySelectorAll(".word-btn").forEach(btn=>{
@@ -638,7 +620,7 @@
       transactionId.value = "";
     });
 
-    premiumWordBtn.addEventListener("click", () => { if(selectedPremiumTemplate) downloadDocx(selectedPremiumTemplate); });\n\n    submitNagad.addEventListener("click", () => {
+    document.getElementById("premiumWordBtn").addEventListener("click", () => { if(selectedPremiumTemplate) downloadDocx(selectedPremiumTemplate); });\n\n    submitNagad.addEventListener("click", () => {
       const id = transactionId.value.trim();
       if (!id) {
         nagadStatus.textContent = "Please enter your Nagad Transaction ID.";
