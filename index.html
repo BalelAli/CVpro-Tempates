@@ -620,7 +620,9 @@
       transactionId.value = "";
     });
 
-    document.getElementById("premiumWordBtn").addEventListener("click", () => { if(selectedPremiumTemplate) downloadDocx(selectedPremiumTemplate); });\n\n    submitNagad.addEventListener("click", () => {
+    document.getElementById("premiumWordBtn").addEventListener("click", () => { if(selectedPremiumTemplate) downloadDocx(selectedPremiumTemplate); });
+
+    submitNagad.addEventListener("click", () => {
       const id = transactionId.value.trim();
       if (!id) {
         nagadStatus.textContent = "Please enter your Nagad Transaction ID.";
