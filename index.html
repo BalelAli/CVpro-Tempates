@@ -622,7 +622,7 @@
           </div>
         </div>
       </div>
-        <button id="premiumWordBtn" type="button" class="small-btn premium-btn" style="margin-top:12px;width:100%">Download Editable Word (.docx)</button>
+        <div style="margin-top:12px;padding:12px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:13px">Premium download is available after payment verification. Use <b>Already Paid? Get Download</b> to verify your payment.</div>
       <div class="modal-preview"><div class="cv-paper demo-paper" id="modalCv">
         <div class="cv-top"><div><div class="cv-name" id="modalCvName">YOUR NAME</div><div class="cv-role" id="modalCvRole">PROFESSIONAL TITLE</div><div class="demo-contact">City, Country &nbsp;|&nbsp; +880 1XXX XXX XXX &nbsp;|&nbsp; email@example.com &nbsp;|&nbsp; LinkedIn</div></div><div class="cv-avatar"></div></div>
         <div class="demo-grid">
@@ -804,7 +804,6 @@
       transactionId.value = "";
     });
 
-    document.getElementById("premiumWordBtn").addEventListener("click", () => { if(selectedPremiumTemplate) downloadDocx(selectedPremiumTemplate); });
 
     submitNagad.addEventListener("click", () => {
       const id = transactionId.value.trim();
