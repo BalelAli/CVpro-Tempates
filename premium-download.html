@@ -47,6 +47,7 @@ document.getElementById("submitNagad").addEventListener("click", () => {
   window.location.href = "mailto:Balelali953@gmail.com?subject=" + subject + "&body=" + body;
 });
 
+const API_BASE_URL = "https://YOUR-VERCEL-PROJECT.vercel.app"; // Replace with your deployed backend URL.
 const verifyPayPal = document.getElementById("verifyPayPal");
 verifyPayPal.addEventListener("click", async () => {
   const template = document.getElementById("paypalTemplate").value;
@@ -60,11 +61,15 @@ verifyPayPal.addEventListener("click", async () => {
     status.textContent = "Please enter your PayPal Capture Transaction ID.";
     return;
   }
+  if (!API_BASE_URL.startsWith("https://") || API_BASE_URL.includes("YOUR-VERCEL-PROJECT")) {
+    status.textContent = "Secure payment verification is not configured yet. Please contact the site owner; no download has been unlocked.";
+    return;
+  }
   verifyPayPal.disabled = true;
   verifyPayPal.textContent = "Verifying...";
   status.textContent = "Checking your payment securely with PayPal...";
   try {
-    const response = await fetch("/api/verify-paypal", {
+    const response = await fetch(`${API_BASE_URL}/api/verify-paypal`, {
       method: "POST",
       headers: {"Content-Type":"application/json"},
       body: JSON.stringify({transactionId, template})
