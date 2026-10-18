@@ -1,6 +1,21 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CVPro Premium Download</title><style>body{font-family:Arial,sans-serif;background:#f6f8fc;color:#111827;margin:0}.wrap{max-width:760px;margin:60px auto;padding:25px}.box{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:35px;box-shadow:0 15px 40px #00000012}h1{margin-top:0}p{color:#667085;line-height:1.7}.steps{background:#f8fafc;padding:18px;border-radius:12px;margin:20px 0}a.btn{display:inline-block;padding:12px 16px;border-radius:9px;background:#7c3aed;color:#fff;text-decoration:none;font-weight:700;margin:6px 6px 6px 0}.note{font-size:13px;color:#64748b;margin-top:20px}</style></head><body><div class="wrap"><div class="box"><h1>Premium CV Download</h1><p>Thank you for choosing CVPro. This page is for customers who have completed payment.</p><div class="steps"><b>Payment verification</b><p>For PayPal, keep your PayPal transaction/receipt. For Nagad, keep your Nagad transaction ID. After payment, submit your transaction ID for confirmation.</p><p><b>Nagad:</b> a transaction ID is only a payment claim, not proof of payment. Email your transaction ID and selected template to <b>BalelAli953@gmail.com</b>. Do not expect a download until the seller manually confirms the money was received.</p></div><h2>Payment verification</h2>
 <p>Premium files are protected. You must verify a completed payment before a download link is created.</p>
 <div class="steps">
+  <b>Pay with PayPal</b>
+  <p>Use the official PayPal checkout link to pay first. Keep the PayPal capture transaction ID for verification below.</p>
+  <a class="btn" href="https://www.paypal.com/ncp/payment/8W5T9KR459KC2" target="_blank" rel="noopener noreferrer">Pay with PayPal</a>
+</div>
+<div class="steps">
+  <b>Pay with Nagad (manual verification)</b>
+  <p>Send the displayed price to Nagad number <b>+8801816153953</b>. Enter the transaction ID and email it for manual review. This does not unlock a download automatically; the seller must confirm receipt first.</p>
+  <select id="nagadTemplate" style="width:100%;height:44px;border:1px solid #d0d5dd;border-radius:9px;padding:0 10px;margin:8px 0">
+    <option>Executive Purple</option><option>Professional Pro</option><option>Creative Green</option><option>Dark Sidebar</option><option>Tech Developer</option><option>Portfolio Modern</option>
+  </select>
+  <input id="nagadTransactionId" type="text" placeholder="Nagad Transaction ID" style="width:100%;height:44px;border:1px solid #d0d5dd;border-radius:9px;padding:0 12px;box-sizing:border-box">
+  <button id="submitNagad" class="btn" type="button" style="border:0;cursor:pointer;margin-top:10px">Email Nagad payment for review</button>
+  <div id="nagadStatus" class="note" aria-live="polite"></div>
+</div>
+<div class="steps">
   <b>PayPal</b>
   <p>After payment, enter the PayPal <b>Capture Transaction ID</b> below. The system will verify the payment amount and unlock only the template you purchased.</p>
   <select id="paypalTemplate" style="width:100%;height:44px;border:1px solid #d0d5dd;border-radius:9px;padding:0 10px;margin:8px 0">
@@ -18,6 +33,20 @@
   <a id="secureDownload" class="btn" href="#" rel="nofollow">Download Editable Word</a>
 </div>
 <p class="note"><b>Security note:</b> this page hides download links until the verification API approves payment. The API must be deployed on a server with the required secrets, and paid template assets must be stored privately; files committed to a public GitHub repository can still be downloaded directly.</p><p><a href="index.html">← Back to CVPro</a></p></div></div><script>
+document.getElementById("submitNagad").addEventListener("click", () => {
+  const template = document.getElementById("nagadTemplate").value;
+  const transactionId = document.getElementById("nagadTransactionId").value.trim();
+  const status = document.getElementById("nagadStatus");
+  if (!transactionId) {
+    status.textContent = "Please enter your Nagad Transaction ID.";
+    return;
+  }
+  const subject = encodeURIComponent("Nagad payment review - " + template);
+  const body = encodeURIComponent("Template: " + template + "\\nNagad Transaction ID: " + transactionId + "\\nPlease manually verify receipt before granting download access.");
+  status.textContent = "Opening your email app. This submits a review request only; it does not verify payment or unlock a download.";
+  window.location.href = "mailto:Balelali953@gmail.com?subject=" + subject + "&body=" + body;
+});
+
 const verifyPayPal = document.getElementById("verifyPayPal");
 verifyPayPal.addEventListener("click", async () => {
   const template = document.getElementById("paypalTemplate").value;
