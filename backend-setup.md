@@ -1,27 +1,41 @@
-# CVPro automatic payment verification
+# CVPro payment verification — deployment checklist
 
-The GitHub Pages site is static, so payment verification must run on a serverless backend.
+## Important: GitHub Pages cannot run these API functions
+The public website is currently served from GitHub Pages. GitHub Pages serves static files only, so requests to `/api/verify-paypal` and `/api/premium-download` on the GitHub Pages domain will not run these Node.js handlers.
 
-## Backend
-These Vercel-compatible functions are included:
+Deploy this repository to Vercel (or another Node.js serverless host) and configure the website to call that deployed API origin. Do not assume the API works until the deployed endpoint is tested.
 
-- `api/verify-paypal.js` verifies a PayPal capture ID against the selected template price.
-- `api/premium-download.js` issues a short-lived signed download URL.
+## Required server environment variables
+Configure these in the backend host settings, not in HTML or committed source:
+- `PAYPAL_CLIENT_ID` — Live PayPal REST app client ID
+- `PAYPAL_CLIENT_SECRET` — Live PayPal REST app secret
+- `DOWNLOAD_SECRET` — a random secret with at least 32 characters
 
-## Required environment variables
-Set these on the backend hosting service:
+Never put the PayPal client secret or download signing secret in client-side code or public GitHub files.
 
-- `PAYPAL_CLIENT_ID`
-- `PAYPAL_CLIENT_SECRET`
-- `DOWNLOAD_SECRET`
+## Current premium catalog
+The current homepage lists:
+- Executive Purple — USD 4.99
+- Professional Pro — USD 6.99
+- Creative Green — USD 5.99
+- Dark Sidebar — USD 5.49
+- Tech Developer — USD 6.49
+- Portfolio Modern — USD 6.99
 
-Never put the PayPal Client Secret in `index.html` or commit it to GitHub.
+The secure download handler currently has source assets only for Executive Purple, Professional Pro, Creative Green, and Portfolio Modern. Dark Sidebar and Tech Developer must not be sold as downloadable products until their assets are added to the private download store.
 
-## PayPal
-The PayPal app must be a Live app. The buyer's PayPal transaction/capture ID is sent to the verification endpoint. The endpoint checks that the capture is COMPLETED, USD, and matches the selected template price.
-
-## Important security note
-For a truly protected premium product, the premium source files should not remain publicly downloadable from GitHub Pages. After the backend is deployed, move premium files to private/server-side storage and serve them only through the verified download endpoint.
+## PayPal verification
+The server checks the PayPal capture directly and requires COMPLETED status, USD currency, and the expected amount for the selected template. The buyer must enter a real PayPal capture ID. A successful amount/status check alone is not a complete commerce system: before launch, also bind each capture to the intended product/order and prevent the same capture from being redeemed for another product.
 
 ## Nagad
-Nagad automatic verification requires merchant/API credentials and the applicable Nagad merchant API flow. The current website can continue to collect a Nagad Transaction ID for manual confirmation until those merchant credentials are available.
+The current Nagad flow collects the transaction ID and opens an email for manual review. This is a request for review, not automatic payment verification. Do not grant download access until the seller independently confirms that the payment was received. Automated verification requires official Nagad merchant/API credentials and a server-side integration.
+
+## Critical asset protection requirement
+The repository is public and template files under `templates/` are directly readable/downloadable from GitHub. A signed download URL does not protect a file that is still publicly available at its raw GitHub URL. Before charging customers, move all premium source files to private storage accessible only to the serverless download handler. Deleting a file from the latest commit alone is not sufficient to erase it from public Git history.
+
+## Pre-launch checks
+1. Deploy the API functions on a serverless host and set the secrets above.
+2. Configure the frontend to call the deployed API origin (GitHub Pages cannot resolve relative `/api/*` calls to a separate Vercel deployment automatically).
+3. Move paid assets to private storage and verify direct public GitHub file URLs no longer expose them.
+4. Test wrong IDs, pending/failed captures, wrong amounts, expired links, and repeated use of one capture ID. All must fail closed.
+5. Test a real low-value purchase and refund before public launch.
