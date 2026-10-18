@@ -1,14 +1,14 @@
 import crypto from "node:crypto";
 
-const PRICES = {
+// Keep these prices aligned with the premium cards in index.html.
+const PRICES = Object.freeze({
   "Executive Purple": "4.99",
   "Professional Pro": "6.99",
   "Creative Green": "5.99",
-  "ATS Elite": "5.99",
-  "Tech Minimal": "7.99",
-  "Executive Minimal": "8.99",
+  "Dark Sidebar": "5.49",
+  "Tech Developer": "6.49",
   "Portfolio Modern": "6.99",
-};
+});
 
 function cors(res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -72,13 +72,17 @@ export default async function handler(req, res) {
     const paidAmount = capture?.amount?.value;
     const currency = capture?.amount?.currency_code;
 
-    if (capture.status !== "COMPLETED" || currency !== "USD" || paidAmount !== expected) {
+    if (capture.id !== transactionId || capture.status !== "COMPLETED" || currency !== "USD" || paidAmount !== expected) {
       return res.status(400).json({
         error: "Payment is not valid for this template.",
         status: capture.status,
         amount: paidAmount,
         currency,
       });
+    }
+
+    if (!process.env.DOWNLOAD_SECRET || process.env.DOWNLOAD_SECRET.length < 32) {
+      return res.status(503).json({ error: "Secure downloads are not configured yet." });
     }
 
     const downloadToken = signDownload(template, transactionId);
