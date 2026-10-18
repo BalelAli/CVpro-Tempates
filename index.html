@@ -714,6 +714,39 @@
     const nagadStatus = document.getElementById("nagadStatus");
     let selectedPremiumTemplate = "";
 
+    // Show the whole CV at first, with zoom controls for readable detail.
+    const previewPanel = document.querySelector(".modal-preview");
+    const previewStage = document.getElementById("previewStage");
+    const previewCv = document.getElementById("modalCv");
+    const fitPreviewBtn = document.getElementById("fitPreview");
+    const zoomOutBtn = document.getElementById("zoomOut");
+    const zoomInBtn = document.getElementById("zoomIn");
+    const actualSizeBtn = document.getElementById("actualSize");
+    let previewZoomMode = "fit";
+    let manualPreviewScale = 1;
+    function applyPreviewZoom(mode) {
+      previewZoomMode = mode;
+      const panelWidth = Math.max(220, previewPanel.clientWidth - 24);
+      const toolbar = previewPanel.querySelector(".preview-controls");
+      const availableHeight = Math.max(180, previewPanel.clientHeight - (toolbar ? toolbar.offsetHeight : 0) - 28);
+      const naturalHeight = Math.max(previewCv.scrollHeight, 900);
+      const fitScale = Math.min(panelWidth / 760, availableHeight / naturalHeight, 1);
+      const scale = mode === "fit" ? fitScale : mode === "actual" ? 1 : manualPreviewScale;
+      previewCv.style.transform = "scale(" + scale + ")";
+      previewStage.style.width = (760 * scale) + "px";
+      previewStage.style.height = (naturalHeight * scale) + "px";
+      fitPreviewBtn.classList.toggle("active", mode === "fit");
+      actualSizeBtn.classList.toggle("active", mode === "actual");
+      previewPanel.scrollTop = 0;
+      previewPanel.scrollLeft = 0;
+    }
+    fitPreviewBtn.addEventListener("click", () => applyPreviewZoom("fit"));
+    actualSizeBtn.addEventListener("click", () => { manualPreviewScale = 1; applyPreviewZoom("actual"); });
+    zoomInBtn.addEventListener("click", () => { manualPreviewScale = Math.min((previewZoomMode === "fit" ? 0.75 : manualPreviewScale) + 0.1, 1.4); applyPreviewZoom("manual"); });
+    zoomOutBtn.addEventListener("click", () => { manualPreviewScale = Math.max((previewZoomMode === "fit" ? 0.75 : manualPreviewScale) - 0.1, 0.4); applyPreviewZoom("manual"); });
+    window.addEventListener("resize", () => { if (previewZoomMode === "fit") applyPreviewZoom("fit"); });
+
+
     // Real editable Microsoft Word (.docx) generator — six genuinely different Word layouts
     const wordLayouts={"Modern Blue":"modern","Executive Purple":"executive","Simple Green":"ats","Professional Pro":"corporate","Classic CV":"classic","Creative Green":"creative","Minimal One Column":"minimal","Dark Sidebar":"dark","Timeline CV":"timeline","Tech Developer":"tech2","Academic CV":"academic","Portfolio Modern":"portfolio2"};
 
