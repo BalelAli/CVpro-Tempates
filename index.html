@@ -852,6 +852,7 @@
         document.getElementById("modalCvRole").textContent = role.toUpperCase();
         document.querySelectorAll("#modalCv .demo-heading").forEach(h => { h.style.color = accentColor; h.style.borderColor = accentColor; });
         modal.classList.add("show");
+        setTimeout(() => applyPreviewZoom("fit"), 0);
       });
     });
 
@@ -887,6 +888,7 @@
         transactionId.value = "";
         nagadStatus.textContent = "";
         modal.classList.add("show");
+        setTimeout(() => applyPreviewZoom("fit"), 0);
       });
     });
 
