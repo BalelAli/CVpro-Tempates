@@ -394,7 +394,19 @@
 .demo-paper.layout-tech2{background:#0f172a;color:#e2e8f0;padding:0!important}.demo-paper.layout-tech2 .cv-top{background:#1e293b;color:#fff;padding:30px 38px;margin:0}.demo-paper.layout-tech2 .cv-name,.demo-paper.layout-tech2 .cv-role,.demo-paper.layout-tech2 .demo-contact{color:#fff}.demo-paper.layout-tech2 .demo-grid{grid-template-columns:1fr 1fr;padding:28px 38px}.demo-paper.layout-tech2 .demo-side{background:#111827;border:0;padding:18px}.demo-paper.layout-tech2 .demo-heading{color:#22c55e!important;border-color:#22c55e!important}
 .demo-paper.layout-academic{font-family:Georgia,serif}.demo-paper.layout-academic .cv-top{display:block;text-align:center;border-bottom:3px double #374151;padding-bottom:15px}.demo-paper.layout-academic .cv-avatar{display:none}.demo-paper.layout-academic .demo-grid{display:grid;grid-template-columns:1fr 1fr}.demo-paper.layout-academic .demo-side{border-left:1px solid #d1d5db;padding-left:22px}
 .demo-paper.layout-portfolio2{padding:0!important}.demo-paper.layout-portfolio2 .cv-top{background:linear-gradient(135deg,#111827,#4f46e5);color:#fff;padding:38px;margin:0}.demo-paper.layout-portfolio2 .cv-name,.demo-paper.layout-portfolio2 .cv-role,.demo-paper.layout-portfolio2 .demo-contact{color:#fff}.demo-paper.layout-portfolio2 .demo-grid{grid-template-columns:1.3fr .7fr;padding:28px 38px}.demo-paper.layout-portfolio2 .demo-side{background:#eef2ff;border:0;padding:18px;border-radius:12px}
-\n</style>
+\n
+/* CV preview sizing: responsive page fit plus scrollable zoom detail */
+.modal-box{width:min(1120px,96vw);max-height:94vh;display:flex;flex-direction:column;overflow:hidden;padding:clamp(12px,2vw,24px)}
+.modal-preview{display:block;max-height:calc(94vh - 175px);min-height:180px;overflow:auto;padding:12px;background:#e9edf5;border:1px solid #dbe2ec}
+#modalCv{width:760px;max-width:none;min-height:900px;height:auto;flex:none;transform-origin:top left;overflow:visible}
+.preview-controls{position:sticky;top:-12px;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:-12px -12px 12px;padding:10px 12px;background:rgba(248,250,252,.97);border-bottom:1px solid #dbe2ec}
+.preview-controls>span{font-size:12px;font-weight:800;color:#475467}.preview-controls>div{display:flex;gap:6px}
+.preview-zoom{min-height:30px;padding:4px 10px;border:1px solid #cbd5e1;border-radius:7px;background:#fff;color:#1f2937;font-size:12px;font-weight:700;cursor:pointer}
+.preview-zoom.active,.preview-zoom:hover{background:#1d4ed8;border-color:#1d4ed8;color:#fff}
+.preview-stage{position:relative;flex:none;margin:0 auto 12px;min-width:1px}
+@media(max-width:700px){.modal{padding:8px}.modal-box{width:100%;max-height:96vh;padding:12px}.modal-preview{max-height:calc(96vh - 190px);padding:8px}.preview-controls{top:-8px;margin:-8px -8px 10px;padding:8px}.preview-zoom{padding:4px 7px}}
+
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/docx@9.5.1/dist/index.iife.js"></script>
   <meta name="cvpro-preview-language" content="en">
