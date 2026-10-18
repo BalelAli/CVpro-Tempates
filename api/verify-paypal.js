@@ -5,8 +5,6 @@ const PRICES = Object.freeze({
   "Executive Purple": "4.99",
   "Professional Pro": "6.99",
   "Creative Green": "5.99",
-  "Dark Sidebar": "5.49",
-  "Tech Developer": "6.49",
   "Portfolio Modern": "6.99",
 });
 
