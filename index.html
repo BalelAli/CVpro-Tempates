@@ -760,7 +760,7 @@
     });
 
     function renderDistinctPreview(cv, layout, role) {
-      const head = '<header class="pv-head"><div class="cv-name" id="modalCvName">YOUR NAME</div><div class="cv-role" id="modalCvRole">' + (role || 'PROFESSIONAL TITLE').toUpperCase() + '</div><div class="demo-contact">City · Phone · Email · LinkedIn</div></header>';
+      const head = '<div class="pv-head"><div class="cv-name" id="modalCvName">YOUR NAME</div><div class="cv-role" id="modalCvRole">' + (role || 'PROFESSIONAL TITLE').toUpperCase() + '</div><div class="demo-contact">City · Phone · Email · LinkedIn</div></div>';
       const h = t => '<div class="demo-heading">' + t + '</div>';
       const p = t => '<div class="demo-copy">' + t + '</div>';
       const b = t => '<div class="demo-line">• ' + t + '</div>';
