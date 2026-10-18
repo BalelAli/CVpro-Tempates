@@ -88,7 +88,7 @@ export default async function handler(req, res) {
     }
 
     const downloadToken = signDownload(template, transactionId);
-    const apiBaseUrl = (process.env.API_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "")).replace(/\\/$/, "");
+    const apiBaseUrl = (process.env.API_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "")).replace(/\/$/, "");
     if (!apiBaseUrl.startsWith("https://")) {
       return res.status(503).json({ error: "Secure download API URL is not configured yet." });
     }
