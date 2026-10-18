@@ -10,6 +10,8 @@ Configure these in the backend host settings, not in HTML or committed source:
 - `PAYPAL_CLIENT_ID` — Live PayPal REST app client ID
 - `PAYPAL_CLIENT_SECRET` — Live PayPal REST app secret
 - `DOWNLOAD_SECRET` — a random secret with at least 32 characters
+- `API_BASE_URL` — the full HTTPS URL of the deployed Vercel project (for example, `https://your-project.vercel.app`)
+- `SITE_ORIGIN` — `https://balelali.github.io`
 
 Never put the PayPal client secret or download signing secret in client-side code or public GitHub files.
 
@@ -35,7 +37,7 @@ The repository is public and template files under `templates/` are directly read
 
 ## Pre-launch checks
 1. Deploy the API functions on a serverless host and set the secrets above.
-2. Configure the frontend to call the deployed API origin (GitHub Pages cannot resolve relative `/api/*` calls to a separate Vercel deployment automatically).
-3. Move paid assets to private storage and verify direct public GitHub file URLs no longer expose them.
+2. Replace `https://YOUR-VERCEL-PROJECT.vercel.app` in `premium-download.html` with the real Vercel project URL. Set `API_BASE_URL` to that same URL and `SITE_ORIGIN` to `https://balelali.github.io` in Vercel, then redeploy. The frontend deliberately fails closed while the placeholder remains.
+3. Move paid assets to private storage and verify direct public GitHub file URLs no longer expose them. This is still mandatory; the current assets in this public repository remain directly accessible and this code change alone cannot prevent that.
 4. Test wrong IDs, pending/failed captures, wrong amounts, expired links, and repeated use of one capture ID. All must fail closed.
 5. Test a real low-value purchase and refund before public launch.
