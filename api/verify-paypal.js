@@ -8,8 +8,12 @@ const PRICES = Object.freeze({
   "Portfolio Modern": "6.99",
 });
 
-function cors(res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+function cors(req, res) {
+  const allowedOrigin = process.env.SITE_ORIGIN || "https://balelali.github.io";
+  const requestOrigin = req.headers.origin;
+  if (!requestOrigin || requestOrigin === allowedOrigin) {
+    res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
+  }
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 }
@@ -44,7 +48,7 @@ function signDownload(template, captureId) {
 }
 
 export default async function handler(req, res) {
-  cors(res);
+  cors(req, res);
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
 
@@ -84,10 +88,14 @@ export default async function handler(req, res) {
     }
 
     const downloadToken = signDownload(template, transactionId);
+    const apiBaseUrl = (process.env.API_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "")).replace(/\\/$/, "");
+    if (!apiBaseUrl.startsWith("https://")) {
+      return res.status(503).json({ error: "Secure download API URL is not configured yet." });
+    }
     return res.status(200).json({
       verified: true,
       template,
-      downloadUrl: `/api/premium-download?template=${encodeURIComponent(template)}&token=${downloadToken}`,
+      downloadUrl: `${apiBaseUrl}/api/premium-download?template=${encodeURIComponent(template)}&token=${downloadToken}`,
     });
   } catch (error) {
     return res.status(500).json({ error: "Verification service error." });
