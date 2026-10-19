@@ -396,15 +396,31 @@
 .demo-paper.layout-portfolio2{padding:0!important}.demo-paper.layout-portfolio2 .cv-top{background:linear-gradient(135deg,#111827,#4f46e5);color:#fff;padding:38px;margin:0}.demo-paper.layout-portfolio2 .cv-name,.demo-paper.layout-portfolio2 .cv-role,.demo-paper.layout-portfolio2 .demo-contact{color:#fff}.demo-paper.layout-portfolio2 .demo-grid{grid-template-columns:1.3fr .7fr;padding:28px 38px}.demo-paper.layout-portfolio2 .demo-side{background:#eef2ff;border:0;padding:18px;border-radius:12px}
 \n
 /* CV preview sizing: responsive page fit plus scrollable zoom detail */
-.modal-box{width:min(1120px,96vw);max-height:94vh;display:flex;flex-direction:column;overflow:hidden;padding:clamp(12px,2vw,24px)}
-.modal-preview{display:block;max-height:calc(94vh - 175px);min-height:180px;overflow:auto;padding:12px;background:#e9edf5;border:1px solid #dbe2ec}
+.modal{padding:12px;overflow:hidden}
+.modal-box{width:min(1120px,96vw);height:min(94vh,1000px);max-height:94vh;display:flex;flex-direction:column;overflow:hidden;padding:clamp(12px,2vw,24px)}
+#modalTitle{font-size:clamp(18px,2vw,24px);line-height:1.25}
+#modalText{flex:none}
+.modal-preview{display:block;flex:1 1 auto;min-height:0;max-height:none;height:auto;overflow:auto;padding:12px;background:#e9edf5;border:1px solid #dbe2ec}
+#previewStage{position:relative;display:block;flex:none;margin:0 auto 12px;min-width:1px}
 #modalCv{width:760px;max-width:none;min-height:900px;height:auto;flex:none;transform-origin:top left;overflow:visible}
+.templates.show-layout-pictures .preview{height:430px;padding:16px}
+.templates.show-layout-pictures .preview .cv-paper{min-height:100%;height:100%;transform:scale(1);transform-origin:top center}
+.templates.show-layout-pictures .card{box-shadow:0 12px 30px rgba(15,23,42,.10)}
+#layoutPicturesToggle{white-space:nowrap}
+@media(max-width:700px){
+ .modal{padding:6px}
+ .modal-box{width:100%;height:96vh;max-height:96vh;padding:10px;border-radius:12px}
+ .modal-preview{padding:8px;min-height:0}
+ .preview-controls{top:-8px;margin:-8px -8px 10px;padding:8px}
+ .preview-zoom{padding:4px 7px}
+ .templates.show-layout-pictures .preview{height:360px}
+}
 .preview-controls{position:sticky;top:-12px;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:-12px -12px 12px;padding:10px 12px;background:rgba(248,250,252,.97);border-bottom:1px solid #dbe2ec}
 .preview-controls>span{font-size:12px;font-weight:800;color:#475467}.preview-controls>div{display:flex;gap:6px}
 .preview-zoom{min-height:30px;padding:4px 10px;border:1px solid #cbd5e1;border-radius:7px;background:#fff;color:#1f2937;font-size:12px;font-weight:700;cursor:pointer}
 .preview-zoom.active,.preview-zoom:hover{background:#1d4ed8;border-color:#1d4ed8;color:#fff}
-.preview-stage{position:relative;flex:none;margin:0 auto 12px;min-width:1px}
-@media(max-width:700px){.modal{padding:8px}.modal-box{width:100%;max-height:96vh;padding:12px}.modal-preview{max-height:calc(96vh - 190px);padding:8px}.preview-controls{top:-8px;margin:-8px -8px 10px;padding:8px}.preview-zoom{padding:4px 7px}}
+@media(max-width:700px){.preview-controls{top:-8px;margin:-8px -8px 10px;padding:8px}.preview-zoom{padding:4px 7px}}
+
 
 </style>
 
@@ -464,6 +480,7 @@
             <button class="filter-btn" data-filter="free">Free</button>
             <button class="filter-btn" data-filter="premium">Premium</button>
           </div>
+          <button type="button" id="layoutPicturesToggle" class="filter-btn" aria-pressed="false">Show Layout Pictures</button>
           <input id="search" class="search" type="search" placeholder="Search templates..." aria-label="Search templates">
         </div>
 
@@ -675,6 +692,13 @@
     const cards = [...document.querySelectorAll(".template")];
     const filterButtons = [...document.querySelectorAll(".filter-btn")];
     const search = document.getElementById("search");
+    const layoutPicturesToggle = document.getElementById("layoutPicturesToggle");
+    const templateGrid = document.getElementById("templateGrid");
+    layoutPicturesToggle.addEventListener("click", () => {
+      const expanded = templateGrid.classList.toggle("show-layout-pictures");
+      layoutPicturesToggle.setAttribute("aria-pressed", String(expanded));
+      layoutPicturesToggle.textContent = expanded ? "Hide Large Layout Pictures" : "Show Layout Pictures";
+    });
     const empty = document.getElementById("empty");
     let activeFilter = "all";
 
@@ -726,10 +750,10 @@
     let manualPreviewScale = 1;
     function applyPreviewZoom(mode) {
       previewZoomMode = mode;
-      const panelWidth = Math.max(220, previewPanel.clientWidth - 24);
+      const panelWidth = Math.max(220, previewPanel.clientWidth - 28);
       const toolbar = previewPanel.querySelector(".preview-controls");
-      const availableHeight = Math.max(180, previewPanel.clientHeight - (toolbar ? toolbar.offsetHeight : 0) - 28);
-      const naturalHeight = Math.max(previewCv.scrollHeight, 900);
+      const availableHeight = Math.max(220, previewPanel.clientHeight - (toolbar ? toolbar.offsetHeight : 0) - 36);
+      const naturalHeight = Math.max(previewCv.scrollHeight, previewCv.offsetHeight, 900);
       const fitScale = Math.min(panelWidth / 760, availableHeight / naturalHeight, 1);
       const scale = mode === "fit" ? fitScale : mode === "actual" ? 1 : manualPreviewScale;
       previewCv.style.transform = "scale(" + scale + ")";
@@ -852,7 +876,7 @@
         document.getElementById("modalCvRole").textContent = role.toUpperCase();
         document.querySelectorAll("#modalCv .demo-heading").forEach(h => { h.style.color = accentColor; h.style.borderColor = accentColor; });
         modal.classList.add("show");
-        setTimeout(() => applyPreviewZoom("fit"), 0);
+        setTimeout(() => applyPreviewZoom("fit"), 80);
       });
     });
 
