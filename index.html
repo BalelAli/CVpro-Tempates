@@ -473,6 +473,21 @@
     @media(max-width:700px){.templates{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:520px){.templates{grid-template-columns:1fr}}
 
+
+/* Shared header and footer across every CVPro page */
+header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.12);padding:0;color:#fff}
+.top-inner{width:min(1120px,92%);min-height:72px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap}
+.brand{font-size:22px;font-weight:850;letter-spacing:-.5px;color:#fff;white-space:nowrap;text-decoration:none}
+.brand span{color:#60a5fa}
+.top nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.top nav a{display:inline-block;color:#dbeafe;text-decoration:none;margin:0;padding:9px 11px;border-radius:9px;font-size:13px;font-weight:700}
+.top nav a:hover,.top nav a[aria-current=page]{background:rgba(255,255,255,.13);color:#fff}
+.site-footer{background:#0b1220;color:#cbd5e1;padding:30px 0;border-top:1px solid #263244}
+.site-footer-inner{width:min(1120px,92%);margin:auto;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.site-footer-inner strong{display:block;color:#fff}.site-footer-inner small{display:block;color:#94a3b8;font-size:12px}
+.site-footer-links{display:flex;gap:16px;flex-wrap:wrap}.site-footer-links a{color:#dbeafe;text-decoration:none;font-size:13px}
+@media(max-width:700px){.top-inner{padding:12px 0;gap:10px}.top nav{gap:4px}.top nav a{font-size:12px;padding:7px 8px}.site-footer-inner{align-items:flex-start;flex-direction:column}}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/docx@9.5.1/dist/index.iife.js"></script>
@@ -480,17 +495,7 @@
 </head>
 
 <body>
-  <header>
-    <div class="container nav">
-      <a href="#" class="logo">CVPro <span>Templates</span></a>
-      <nav>
-        <a href="#templates">Templates</a>
-        <a href="#features">Why CVPro</a>
-        <a href="#about">About</a>
-        <a href="#templates" class="nav-cta">Browse CVs</a>
-      </nav>
-    </div>
-  </header>
+  <header class="top"><div class="top-inner"><a class="brand" href="index.html">CVPro <span>Templates</span></a><nav aria-label="Main navigation"><a href="index.html">Home &amp; All CVs</a><a href="free-cv-templates.html">Free CVs</a><a href="ats-resume-templates.html">ATS Resume</a><a href="professional-resume-templates.html">Professional</a><a href="cv-templates-for-students.html">Students</a><a href="premium-download.html">Premium / Payment</a></nav></div></header>
 
   <main>
     <section class="hero">
@@ -686,12 +691,7 @@
     </section>
   </main>
 
-  <footer>
-    <div class="container footer-inner">
-      <div><strong>CVPro Templates</strong><br><small>Modern CV & Resume Templates</small></div>
-      <small>© 2026 CVPro Templates. All rights reserved.</small>
-    </div>
-  </footer>
+  <footer class="site-footer"><div class="site-footer-inner"><div><strong>CVPro Templates</strong><small>Professional CV &amp; Resume Designs</small></div><div class="site-footer-links"><a href="index.html">All templates</a><a href="premium-download.html">Payment help</a></div><small>© 2026 CVPro Templates. All rights reserved.</small></div></footer>
 
   <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-box">
