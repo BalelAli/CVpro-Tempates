@@ -1066,5 +1066,56 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
     }, true);
   })();
   </script>
+
+  <script>
+  // Reliable preview close/back controls, independent of the preview renderer.
+  (function () {
+    const modal = document.getElementById("modal");
+    if (!modal) return;
+    let previewHistoryEntry = false;
+    function closePreview() {
+      if (!modal.classList.contains("show")) return;
+      modal.classList.remove("show");
+      document.body.classList.remove("preview-open");
+      if (previewHistoryEntry) {
+        previewHistoryEntry = false;
+        if (history.state && history.state.cvPreviewOpen) history.back();
+      }
+    }
+    document.addEventListener("click", function (event) {
+      if (event.target.closest && event.target.closest("#closeModal, [data-preview-close]")) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        closePreview();
+        return;
+      }
+      if (event.target === modal) closePreview();
+    }, true);
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && modal.classList.contains("show")) {
+        event.preventDefault();
+        closePreview();
+      }
+    }, true);
+    const observer = new MutationObserver(function () {
+      if (modal.classList.contains("show") && !previewHistoryEntry) {
+        previewHistoryEntry = true;
+        document.body.classList.add("preview-open");
+        history.pushState({cvPreviewOpen:true}, "", location.href);
+      } else if (!modal.classList.contains("show")) {
+        document.body.classList.remove("preview-open");
+      }
+    });
+    observer.observe(modal, {attributes:true, attributeFilter:["class"]});
+    window.addEventListener("popstate", function () {
+      if (modal.classList.contains("show")) {
+        previewHistoryEntry = false;
+        modal.classList.remove("show");
+        document.body.classList.remove("preview-open");
+      }
+    });
+  })();
+  </script>
+
 </body>
 </html>
