@@ -661,7 +661,7 @@
         </div>
       </div>
         <div style="margin-top:12px;padding:12px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:13px">Premium download is available after payment verification. Use <b>Already Paid? Get Download</b> to verify your payment.</div>
-      <div class="modal-preview"><div class="preview-controls" aria-label="Preview zoom controls"><span>CV preview</span><div><button type="button" id="fitPreview" class="preview-zoom active">Fit page</button><button type="button" id="zoomOut" class="preview-zoom" aria-label="Zoom out">−</button><button type="button" id="zoomIn" class="preview-zoom" aria-label="Zoom in">+</button><button type="button" id="actualSize" class="preview-zoom">100%</button></div></div><div id="previewStage" class="preview-stage"><div class="cv-paper demo-paper" id="modalCv">
+      <div class="modal-preview"><div class="preview-controls" aria-label="Preview zoom controls"><span>CV preview · Fit width lets you read the layout; scroll down for the full page</span><div><button type="button" id="fitPreview" class="preview-zoom active">Fit width</button><button type="button" id="zoomOut" class="preview-zoom" aria-label="Zoom out">−</button><button type="button" id="zoomIn" class="preview-zoom" aria-label="Zoom in">+</button><button type="button" id="actualSize" class="preview-zoom">100%</button></div></div><div id="previewStage" class="preview-stage"><div class="cv-paper demo-paper" id="modalCv">
         <div class="cv-top"><div><div class="cv-name" id="modalCvName">YOUR NAME</div><div class="cv-role" id="modalCvRole">PROFESSIONAL TITLE</div><div class="demo-contact">City, Country &nbsp;|&nbsp; +880 1XXX XXX XXX &nbsp;|&nbsp; email@example.com &nbsp;|&nbsp; LinkedIn</div></div><div class="cv-avatar"></div></div>
         <div class="demo-grid">
           <div class="demo-main">
@@ -754,7 +754,7 @@
       const toolbar = previewPanel.querySelector(".preview-controls");
       const availableHeight = Math.max(220, previewPanel.clientHeight - (toolbar ? toolbar.offsetHeight : 0) - 36);
       const naturalHeight = Math.max(previewCv.scrollHeight, previewCv.offsetHeight, 900);
-      const fitScale = Math.min(panelWidth / 760, availableHeight / naturalHeight, 1);
+      const fitScale = Math.min(panelWidth / 760, 1); // Fit the CV to the preview width; scroll vertically to see the full page at readable size.
       const scale = mode === "fit" ? fitScale : mode === "actual" ? 1 : manualPreviewScale;
       previewCv.style.transform = "scale(" + scale + ")";
       previewStage.style.width = (760 * scale) + "px";
