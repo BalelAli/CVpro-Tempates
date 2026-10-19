@@ -422,6 +422,57 @@
 @media(max-width:700px){.preview-controls{top:-8px;margin:-8px -8px 10px;padding:8px}.preview-zoom{padding:4px 7px}}
 
 
+
+    /* Distinct card-preview compositions: structure changes, not just accent colours. */
+    .card-layout-modern{border-top:5px solid #2563eb}
+    .card-layout-executive{font-family:Georgia,serif;border-top:7px double #7c3aed;text-align:center}
+    .card-layout-executive .cv-top{display:block;text-align:center;border-bottom:2px solid #e9d5ff;padding-bottom:10px}
+    .card-layout-executive .cv-avatar{display:none}
+    .card-layout-executive .line{margin-left:auto;margin-right:auto}
+    .card-layout-ats{border-top:3px solid #111827}
+    .card-layout-ats .cv-top{display:block;border-bottom:1px solid #d1d5db;padding-bottom:8px}
+    .card-layout-ats .cv-avatar{display:none}
+    .card-layout-ats .line{height:4px;border-radius:1px}
+    .card-layout-corporate{position:relative;padding-left:34%;border-top:8px solid #111827}
+    .card-layout-corporate:before{content:'CONTACT\A\A SKILLS\A\A TOOLS\A\A LANGUAGES';white-space:pre;position:absolute;left:0;top:0;bottom:0;width:28%;padding:15px 7px;background:#111827;color:#dbeafe;font-size:7px;font-weight:800;line-height:2.2}
+    .card-layout-corporate .cv-top{display:block}
+    .card-layout-corporate .cv-avatar{display:none}
+    .card-layout-classic{font-family:Georgia,serif;border-top:0;border-bottom:4px double #6b7280}
+    .card-layout-classic .cv-top{display:block;text-align:center;border-bottom:3px double #9ca3af;padding-bottom:9px}
+    .card-layout-classic .cv-avatar{display:none}
+    .card-layout-classic .line:nth-of-type(odd){width:72%;margin-left:auto;margin-right:auto}
+    .card-layout-creative{border-top:0;padding-top:0;position:relative}
+    .card-layout-creative .cv-top{background:#065f46;color:#fff;margin:0 -18px 12px;padding:15px 18px}
+    .card-layout-creative .cv-role{color:#d1fae5}
+    .card-layout-creative .cv-avatar{border-radius:5px;background:#a7f3d0}
+    .card-layout-minimal{border-top:0;padding-left:26px}
+    .card-layout-minimal:before{content:'01  PROFILE';display:block;color:#64748b;font-size:8px;font-weight:900;border-bottom:1px solid #d1d5db;padding-bottom:5px;margin-bottom:8px}
+    .card-layout-minimal .cv-top{display:block}
+    .card-layout-minimal .cv-avatar{display:none}
+    .card-layout-minimal .line{height:2px;background:#9ca3af;border-radius:0}
+    .card-layout-dark{padding:14px 12px 14px 38%;position:relative;background:#fff}
+    .card-layout-dark:before{content:'YN\A\A CONTACT\A\A SKILLS\A\A LANGUAGES';white-space:pre;position:absolute;left:0;top:0;bottom:0;width:31%;padding:14px 7px;background:#111827;color:#a7f3d0;font-size:7px;font-weight:900;line-height:2.1}
+    .card-layout-dark .cv-top{display:block}
+    .card-layout-dark .cv-avatar{display:none}
+    .card-layout-timeline{border-top:4px solid #059669}
+    .card-layout-timeline .cv-top{border-bottom:1px solid #d1fae5;padding-bottom:8px}
+    .card-layout-timeline .line{border-radius:0 5px 5px 0;border-left:3px solid #059669;height:8px;background:#e5e7eb}
+    .card-layout-tech{border-top:8px solid #0f172a;position:relative}
+    .card-layout-tech:before{content:'< DEV />  SOFTWARE PROFILE';display:block;background:#0f172a;color:#4ade80;font:700 8px Consolas,monospace;padding:7px;margin:-18px -18px 12px}
+    .card-layout-tech .cv-top{display:none}
+    .card-layout-tech .line:nth-of-type(odd){background:#bbf7d0;width:45%}
+    .card-layout-academic{font-family:Georgia,serif;border-top:0}
+    .card-layout-academic .cv-top{display:block;text-align:center;border-bottom:1px solid #111827;padding-bottom:8px}
+    .card-layout-academic .cv-avatar{display:none}
+    .card-layout-academic:before{content:'RESEARCH  ·  PUBLICATIONS  ·  TEACHING';display:block;text-align:center;font:700 6px Georgia,serif;border-bottom:2px solid #111827;padding-bottom:5px;margin-bottom:8px}
+    .card-layout-portfolio{border-top:7px solid #4f46e5}
+    .card-layout-portfolio .cv-top{display:block;background:#111827;color:#fff;margin:-18px -18px 10px;padding:12px 18px}
+    .card-layout-portfolio .cv-role{color:#c7d2fe}
+    .card-layout-portfolio .cv-avatar{display:none}
+    .card-layout-portfolio:before{content:'01 BRAND   02 MOBILE   03 WEB';display:block;background:#eef2ff;color:#4338ca;font-size:7px;font-weight:900;padding:9px;margin-bottom:10px}
+    @media(max-width:700px){.templates{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:520px){.templates{grid-template-columns:1fr}}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/docx@9.5.1/dist/index.iife.js"></script>
