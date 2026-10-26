@@ -1179,7 +1179,7 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
         const status = document.getElementById("nagadStatus");
         const value = id ? id.value.trim() : "";
         const email = customerEmail ? customerEmail.value.trim() : "";
-        if (!email || !/^\\S+@\\S+\\.\\S+$/.test(email)) {
+        if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
           if (status) {
             status.style.color = "#b42318";
             status.textContent = "Please enter a valid email address.";
