@@ -1043,6 +1043,30 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
     });
   })();
   </script>
+  <script>
+    // Safety fallback: keeps Premium Buy working even if another optional script fails.
+    document.addEventListener("click", function (event) {
+      const btn = event.target.closest && event.target.closest("[data-buy]");
+      if (!btn) return;
+      const modal = document.getElementById("modal");
+      const paymentBox = document.getElementById("paymentBox");
+      const nagadInfo = document.getElementById("nagadInfo");
+      const transactionId = document.getElementById("transactionId");
+      const nagadStatus = document.getElementById("nagadStatus");
+      if (!modal || !paymentBox) return;
+      if (modal.classList.contains("show")) return;
+      const name = btn.getAttribute("data-buy") || "Premium Template";
+      const title = document.getElementById("modalTitle");
+      const text = document.getElementById("modalText");
+      if (title) title.textContent = name + " — Full Demo Preview";
+      if (text) text.textContent = "Review the complete design first. When you are ready, choose PayPal or Nagad below to purchase this template.";
+      paymentBox.style.display = "block";
+      if (nagadInfo) nagadInfo.style.display = "none";
+      if (transactionId) transactionId.value = "";
+      if (nagadStatus) nagadStatus.textContent = "";
+      modal.classList.add("show");
+    }, false);
+  </script>
 
 </body>
 </html>
