@@ -1088,40 +1088,20 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
         const role = btn.getAttribute("data-role") || "Professional";
         window.cvproSelectedPremiumTemplate = name;
 
-        cv.className = "cv-paper demo-paper";
+        const layoutMap = {
+          "Modern Blue":"modern", "Executive Purple":"executive", "Simple Green":"ats",
+          "Professional Pro":"corporate", "Classic CV":"classic", "Creative Green":"creative",
+          "Minimal One Column":"minimal", "Dark Sidebar":"dark", "Timeline CV":"timeline",
+          "Tech Developer":"tech2", "Academic CV":"academic", "Portfolio Modern":"portfolio2"
+        };
+        const layout = layoutMap[name] || "modern";
+        cv.className = "cv-paper demo-paper layout-" + layout;
         cv.style.transform = "none";
-        cv.innerHTML =
-          '<div class="pv-head">' +
-            '<div class="cv-name">YOUR NAME</div>' +
-            '<div class="cv-role">' + role.toUpperCase() + '</div>' +
-            '<div class="demo-contact">City · Phone · Email · LinkedIn</div>' +
-          '</div>' +
-          '<div class="demo-grid">' +
-            '<div class="demo-main">' +
-              '<div class="demo-heading">PROFILE</div>' +
-              '<div class="demo-copy">Results-focused professional with practical experience, strong communication and measurable achievements.</div>' +
-              '<div class="demo-heading">EXPERIENCE</div>' +
-              '<div class="demo-job">Senior Professional — Company Name</div>' +
-              '<div class="demo-date">2022 — Present</div>' +
-              '<div class="demo-line">• Delivered measurable improvements across key projects.</div>' +
-              '<div class="demo-line">• Led teams, stakeholders and daily execution.</div>' +
-              '<div class="demo-line">• Improved quality, efficiency and business results.</div>' +
-              '<div class="demo-job">Professional — Previous Company</div>' +
-              '<div class="demo-date">2019 — 2022</div>' +
-              '<div class="demo-line">• Managed responsibilities and process improvements.</div>' +
-              '<div class="demo-heading">EDUCATION</div>' +
-              '<div class="demo-job">Degree / Major — University Name</div>' +
-              '<div class="demo-date">2015 — 2019</div>' +
-            '</div>' +
-            '<div class="demo-side">' +
-              '<div class="demo-heading">SKILLS</div>' +
-              '<div class="demo-copy">Leadership<br>Communication<br>Problem Solving<br>Project Management<br>MS Office / Tools</div>' +
-              '<div class="demo-heading">CERTIFICATIONS</div>' +
-              '<div class="demo-copy">Certification Name<br>Training / Course</div>' +
-              '<div class="demo-heading">LANGUAGES</div>' +
-              '<div class="demo-copy">English — Professional<br>Bangla — Native</div>' +
-            '</div>' +
-          '</div>';
+        if (typeof window.renderDistinctPreview === "function") {
+          window.renderDistinctPreview(cv, layout, role);
+        } else if (typeof renderDistinctPreview === "function") {
+          renderDistinctPreview(cv, layout, role);
+        }
 
         modalTitle.textContent = name + " — Full Demo Preview";
         modalText.textContent = mode === "buy"
