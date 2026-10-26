@@ -1211,7 +1211,11 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
         formData.append("Customer Email", email);
         formData.append("Nagad Transaction ID", value);
         formData.append("_replyto", email);
+        const proceedUrl = "https://balelali.github.io/CVpro-Tempates/admin-verify.html?template=" + encodeURIComponent(name) + "&email=" + encodeURIComponent(email) + "&tx=" + encodeURIComponent(value);
         formData.append("_autoresponse", "Thank you. We received your Nagad payment submission for " + name + ". Your Transaction ID is " + value + ". We will manually verify the payment and contact you by email after verification. This email confirms submission only, not payment approval.");
+        formData.append("_html", "true");
+        formData.append("Owner Proceed URL", proceedUrl);
+        formData.append("_message", "Nagad payment notification. Verify the payment in your Nagad account, then open the Proceed URL below: " + proceedUrl);
         formData.append("_captcha", "false");
 
         fetch("https://formsubmit.co/ajax/BalelAli953@gmail.com", {
