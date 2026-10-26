@@ -1061,8 +1061,9 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
     document.addEventListener("click", function(event) {
       const previewButton = event.target.closest && event.target.closest("[data-preview]");
       if (previewButton) { event.preventDefault(); event.stopImmediatePropagation(); showPreview(previewButton.dataset.preview,false); return; }
+      // Buy buttons are handled by the main purchase handler above so payment controls (PayPal/Nagad) stay functional.
       const buyButton = event.target.closest && event.target.closest("[data-buy]");
-      if (buyButton) { event.preventDefault(); event.stopImmediatePropagation(); showPreview(buyButton.dataset.buy,true); }
+      if (buyButton) return;
     }, true);
   })();
   </script>
