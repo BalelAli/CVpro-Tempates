@@ -1061,9 +1061,22 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
     document.addEventListener("click", function(event) {
       const previewButton = event.target.closest && event.target.closest("[data-preview]");
       if (previewButton) { event.preventDefault(); event.stopImmediatePropagation(); showPreview(previewButton.dataset.preview,false); return; }
-      // Buy buttons are handled by the main purchase handler above so payment controls (PayPal/Nagad) stay functional.
       const buyButton = event.target.closest && event.target.closest("[data-buy]");
-      if (buyButton) return;
+      if (buyButton) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        showPreview(buyButton.dataset.buy,true);
+        const paymentBox = document.getElementById("paymentBox");
+        const nagadInfo = document.getElementById("nagadInfo");
+        const transactionId = document.getElementById("transactionId");
+        const nagadStatus = document.getElementById("nagadStatus");
+        window.selectedPremiumTemplateFallback = buyButton.dataset.buy;
+        if (paymentBox) paymentBox.style.display = "block";
+        if (nagadInfo) nagadInfo.style.display = "none";
+        if (transactionId) transactionId.value = "";
+        if (nagadStatus) nagadStatus.textContent = "";
+        return;
+      }
     }, true);
   })();
   </script>
