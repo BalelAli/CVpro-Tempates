@@ -1184,25 +1184,44 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
           return;
         }
 
-        // A website cannot verify whether a Nagad transaction ID is genuine by itself.
-        // Accept the ID, prepare the verification email, and clearly tell the user what happens next.
+        // Send the submission to the site owner's email through FormSubmit.
+        // Nagad payment itself still needs manual verification in the owner's Nagad statement.
         const name = window.cvproSelectedPremiumTemplate || "Premium Template";
-        const subject = encodeURIComponent("Nagad Payment - " + name);
-        const body = encodeURIComponent(
-          "Premium Template: " + name +
-          "\nNagad Transaction ID: " + value +
-          "\n\nPlease verify my payment and send/enable my premium template."
-        );
         if (status) {
-          status.style.color = "#067647";
-          status.textContent = "Transaction ID accepted. Opening your email to send it for manual verification...";
+          status.style.color = "#8a5a00";
+          status.textContent = "Sending your Transaction ID...";
         }
-        // Keep the user on this page. The transaction ID is now shown as submitted
-        // for manual verification; no email page/tab is opened automatically.
-        if (status) {
-          status.style.color = "#067647";
-          status.textContent = "Transaction ID submitted successfully. We will verify your payment manually.";
-        }
+        submit.disabled = true;
+
+        const formData = new FormData();
+        formData.append("_subject", "Nagad Payment - " + name);
+        formData.append("Premium Template", name);
+        formData.append("Nagad Transaction ID", value);
+        formData.append("_captcha", "false");
+
+        fetch("https://formsubmit.co/ajax/BalelAli953@gmail.com", {
+          method: "POST",
+          headers: { "Accept": "application/json" },
+          body: formData
+        })
+        .then(function (response) {
+          if (!response.ok) throw new Error("Submission failed");
+          return response.json();
+        })
+        .then(function () {
+          if (status) {
+            status.style.color = "#067647";
+            status.textContent = "Transaction ID submitted successfully. Check your email for the payment notification.";
+          }
+          submit.disabled = false;
+        })
+        .catch(function () {
+          if (status) {
+            status.style.color = "#b42318";
+            status.textContent = "Could not send the notification. Please try again.";
+          }
+          submit.disabled = false;
+        });
       }, true);
     })();
   </script>
