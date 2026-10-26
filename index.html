@@ -968,9 +968,10 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
     });
 
     nagadBtn.addEventListener("click", () => {
-      nagadInfo.style.display = nagadInfo.style.display === "none" ? "block" : "none";
+      nagadInfo.style.display = "block";
       nagadStatus.textContent = "";
       transactionId.value = "";
+      nagadInfo.scrollIntoView({ behavior: "smooth", block: "nearest" });
     });
 
 
