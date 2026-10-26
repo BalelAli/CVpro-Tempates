@@ -1068,5 +1068,124 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
     }, false);
   </script>
 
+  <script>
+    // Final interaction guard: handles Preview, Buy and Nagad independently of optional scripts.
+    (function () {
+      function openTemplate(mode, btn) {
+        const modal = document.getElementById("modal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalText = document.getElementById("modalText");
+        const paymentBox = document.getElementById("paymentBox");
+        const nagadInfo = document.getElementById("nagadInfo");
+        const transactionId = document.getElementById("transactionId");
+        const nagadStatus = document.getElementById("nagadStatus");
+        const cv = document.getElementById("modalCv");
+        if (!modal || !cv) return;
+
+        const name = btn.getAttribute("data-" + mode) || "CV Template";
+        const role = btn.getAttribute("data-role") || "Professional";
+        window.cvproSelectedPremiumTemplate = name;
+
+        cv.className = "cv-paper demo-paper";
+        cv.style.transform = "none";
+        cv.innerHTML =
+          '<div class="pv-head">' +
+            '<div class="cv-name">YOUR NAME</div>' +
+            '<div class="cv-role">' + role.toUpperCase() + '</div>' +
+            '<div class="demo-contact">City · Phone · Email · LinkedIn</div>' +
+          '</div>' +
+          '<div class="demo-grid">' +
+            '<div class="demo-main">' +
+              '<div class="demo-heading">PROFILE</div>' +
+              '<div class="demo-copy">Results-focused professional with practical experience, strong communication and measurable achievements.</div>' +
+              '<div class="demo-heading">EXPERIENCE</div>' +
+              '<div class="demo-job">Senior Professional — Company Name</div>' +
+              '<div class="demo-date">2022 — Present</div>' +
+              '<div class="demo-line">• Delivered measurable improvements across key projects.</div>' +
+              '<div class="demo-line">• Led teams, stakeholders and daily execution.</div>' +
+              '<div class="demo-line">• Improved quality, efficiency and business results.</div>' +
+              '<div class="demo-job">Professional — Previous Company</div>' +
+              '<div class="demo-date">2019 — 2022</div>' +
+              '<div class="demo-line">• Managed responsibilities and process improvements.</div>' +
+              '<div class="demo-heading">EDUCATION</div>' +
+              '<div class="demo-job">Degree / Major — University Name</div>' +
+              '<div class="demo-date">2015 — 2019</div>' +
+            '</div>' +
+            '<div class="demo-side">' +
+              '<div class="demo-heading">SKILLS</div>' +
+              '<div class="demo-copy">Leadership<br>Communication<br>Problem Solving<br>Project Management<br>MS Office / Tools</div>' +
+              '<div class="demo-heading">CERTIFICATIONS</div>' +
+              '<div class="demo-copy">Certification Name<br>Training / Course</div>' +
+              '<div class="demo-heading">LANGUAGES</div>' +
+              '<div class="demo-copy">English — Professional<br>Bangla — Native</div>' +
+            '</div>' +
+          '</div>';
+
+        modalTitle.textContent = name + " — Full Demo Preview";
+        modalText.textContent = mode === "buy"
+          ? "Review the complete design first. When ready, choose PayPal or Nagad below."
+          : "View the full template layout. Replace the sample details with your own information.";
+
+        if (paymentBox) paymentBox.style.display = mode === "buy" ? "block" : "none";
+        if (nagadInfo) nagadInfo.style.display = "none";
+        if (transactionId) transactionId.value = "";
+        if (nagadStatus) nagadStatus.textContent = "";
+        modal.classList.add("show");
+
+        if (typeof window.applyPreviewZoom === "function") {
+          setTimeout(function () { window.applyPreviewZoom("fit"); }, 30);
+        }
+      }
+
+      document.addEventListener("click", function (event) {
+        const buy = event.target.closest && event.target.closest("[data-buy]");
+        const preview = event.target.closest && event.target.closest("[data-preview]");
+        const nagad = event.target.closest && event.target.closest("#nagadBtn");
+
+        if (buy) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          openTemplate("buy", buy);
+          return;
+        }
+        if (preview) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          openTemplate("preview", preview);
+          return;
+        }
+        if (nagad) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          const info = document.getElementById("nagadInfo");
+          const status = document.getElementById("nagadStatus");
+          const id = document.getElementById("transactionId");
+          if (info) info.style.display = "block";
+          if (status) status.textContent = "";
+          if (id) id.value = "";
+          if (info) info.scrollIntoView({behavior:"smooth", block:"nearest"});
+        }
+      }, true);
+
+      document.addEventListener("click", function (event) {
+        const submit = event.target.closest && event.target.closest("#submitNagad");
+        if (!submit) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        const id = document.getElementById("transactionId");
+        const status = document.getElementById("nagadStatus");
+        const value = id ? id.value.trim() : "";
+        if (!value) {
+          if (status) status.textContent = "Please enter your Nagad Transaction ID.";
+          return;
+        }
+        const name = window.cvproSelectedPremiumTemplate || "Premium Template";
+        const subject = encodeURIComponent("Nagad Payment - " + name);
+        const body = encodeURIComponent("Premium Template: " + name + "\nNagad Transaction ID: " + value + "\n\nPlease confirm my payment and send/enable my premium template.");
+        window.location.href = "mailto:BalelAli953@gmail.com?subject=" + subject + "&body=" + body;
+      }, true);
+    })();
+  </script>
+
 </body>
 </html>
