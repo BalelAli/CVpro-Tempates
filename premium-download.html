@@ -52,6 +52,23 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
   <button id="verifyPayPal" class="btn" style="border:0;cursor:pointer;margin-top:10px">Verify Payment</button>
   <div id="verifyStatus" class="note"></div>
 </div>
+<h2>After Payment Verification</h2>
+<div class="steps">
+  <b>Owner download / send to customer</b>
+  <p>First check the Nagad Transaction ID in your Nagad account. If the payment is received, select the purchased template below.</p>
+  <select id="verifiedTemplateSelect" style="width:100%;height:44px;border:1px solid #d0d5dd;border-radius:9px;padding:0 10px;margin:8px 0">
+    <option value="Executive Purple">Executive Purple</option>
+    <option value="Professional Pro">Professional Pro</option>
+    <option value="Creative Green">Creative Green</option>
+    <option value="Portfolio Modern">Portfolio Modern</option>
+  </select>
+  <input id="verifiedCustomerEmail" type="email" placeholder="Customer email (optional)" style="width:100%;height:44px;border:1px solid #d0d5dd;border-radius:9px;padding:0 12px;box-sizing:border-box">
+  <div style="margin-top:10px">
+    <a id="ownerDownload" class="btn" href="templates/executive-purple.rtf" download>Download Verified CV</a>
+    <button id="sendDownloadEmail" class="btn" type="button" style="border:0;cursor:pointer">Email Download Link</button>
+  </div>
+  <div id="ownerDownloadStatus" class="note" aria-live="polite"></div>
+</div>
 <h2>Premium Templates</h2>
 <p>Download links are generated only after successful payment verification.</p>
 <div id="downloadArea" style="display:none;background:#f8fafc;padding:16px;border-radius:12px;border:1px solid #e5e7eb">
