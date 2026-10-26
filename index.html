@@ -1197,14 +1197,12 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
           status.style.color = "#067647";
           status.textContent = "Transaction ID accepted. Opening your email to send it for manual verification...";
         }
-        const mailto = "mailto:BalelAli953@gmail.com?subject=" + subject + "&body=" + body;
-        const link = document.createElement("a");
-        link.href = mailto;
-        link.target = "_blank";
-        link.rel = "noopener";
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
+        // Keep the user on this page. The transaction ID is now shown as submitted
+        // for manual verification; no email page/tab is opened automatically.
+        if (status) {
+          status.style.color = "#067647";
+          status.textContent = "Transaction ID submitted successfully. We will verify your payment manually.";
+        }
       }, true);
     })();
   </script>
