@@ -497,6 +497,19 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
 
 <script src="https://cdn.jsdelivr.net/npm/docx@9.5.1/dist/index.iife.js"></script>
   <meta name="cvpro-preview-language" content="en">
+<style id="cvpro-final-layout-fixes">
+#modalCv.layout-dark{padding:0!important;background:#fff!important;overflow:hidden!important;min-height:900px!important}
+#modalCv.layout-dark .pv-dark{display:grid!important;grid-template-columns:34% 66%!important;width:100%!important;min-width:760px!important;min-height:900px!important;margin:0!important;align-items:stretch!important}
+#modalCv.layout-dark .pv-dark>aside{display:block!important;width:auto!important;min-width:0!important;min-height:900px!important;background:#111827!important;padding:28px 20px!important;box-sizing:border-box!important}
+#modalCv.layout-dark .pv-dark>main{display:block!important;width:auto!important;min-width:0!important;min-height:900px!important;background:#fff!important;padding:28px 24px!important;box-sizing:border-box!important}
+#modalCv.layout-dark .pv-dark .pv-head{display:block!important;margin:0!important;padding:0 0 14px!important}
+#modalCv.layout-dark .pv-dark .cv-name{font-size:20px!important;line-height:1.2!important}
+#modalCv.layout-dark .pv-dark .demo-copy,#modalCv.layout-dark .pv-dark .demo-line{overflow-wrap:anywhere}
+@media(max-width:700px){
+#modalCv.layout-dark{min-width:760px!important}
+#modalCv.layout-dark .pv-dark{grid-template-columns:34% 66%!important;min-width:760px!important}
+}
+</style>
 </head>
 
 <body>
@@ -795,7 +808,7 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
     const nagadStatus = document.getElementById("nagadStatus");
     let selectedPremiumTemplate = "";
 
-    // Show the whole CV at first, with zoom controls for readable detail.
+    // Single preview controller: Fit Width + Zoom In/Out + 100%.
     const previewPanel = document.querySelector(".modal-preview");
     const previewStage = document.getElementById("previewStage");
     const previewCv = document.getElementById("modalCv");
@@ -805,28 +818,46 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
     const actualSizeBtn = document.getElementById("actualSize");
     let previewZoomMode = "fit";
     let manualPreviewScale = 1;
+
     function applyPreviewZoom(mode) {
-      previewZoomMode = mode;
-      const panelWidth = Math.max(220, previewPanel.clientWidth - 28);
-      const toolbar = previewPanel.querySelector(".preview-controls");
-      const availableHeight = Math.max(220, previewPanel.clientHeight - (toolbar ? toolbar.offsetHeight : 0) - 36);
-      const naturalHeight = Math.max(previewCv.scrollHeight, previewCv.offsetHeight, 900);
-      const fitScale = Math.min(panelWidth / 760, 1); // Fit the CV to the preview width; scroll vertically to see the full page at readable size.
-      const scale = mode === "fit" ? fitScale : mode === "actual" ? 1 : manualPreviewScale;
+      if (!previewPanel || !previewStage || !previewCv) return;
+      const baseWidth = 760;
+      const panelWidth = Math.max(260, previewPanel.clientWidth - 26);
+      const fitScale = Math.max(0.35, Math.min(panelWidth / baseWidth, 1));
+
+      if (mode === "fit") {
+        previewZoomMode = "fit";
+        manualPreviewScale = fitScale;
+      } else if (mode === "actual") {
+        previewZoomMode = "actual";
+        manualPreviewScale = 1;
+      } else if (mode === "in") {
+        manualPreviewScale = Math.min(1.6, Math.max(0.35, manualPreviewScale + 0.1));
+        previewZoomMode = "manual";
+      } else if (mode === "out") {
+        manualPreviewScale = Math.max(0.35, manualPreviewScale - 0.1);
+        previewZoomMode = "manual";
+      }
+
+      const scale = previewZoomMode === "fit" ? fitScale : manualPreviewScale;
+      previewCv.style.width = baseWidth + "px";
+      previewCv.style.transformOrigin = "top left";
       previewCv.style.transform = "scale(" + scale + ")";
-      previewStage.style.width = (760 * scale) + "px";
-      previewStage.style.height = (naturalHeight * scale) + "px";
-      fitPreviewBtn.classList.toggle("active", mode === "fit");
-      actualSizeBtn.classList.toggle("active", mode === "actual");
-      previewPanel.scrollTop = 0;
-      previewPanel.scrollLeft = 0;
+      previewStage.style.width = Math.ceil(baseWidth * scale) + "px";
+      previewStage.style.height = Math.ceil(Math.max(previewCv.scrollHeight, previewCv.offsetHeight, 900) * scale) + "px";
+      fitPreviewBtn.classList.toggle("active", previewZoomMode === "fit");
+      actualSizeBtn.classList.toggle("active", previewZoomMode === "actual");
     }
+
     window.applyPreviewZoom = applyPreviewZoom;
     fitPreviewBtn.addEventListener("click", () => applyPreviewZoom("fit"));
-    actualSizeBtn.addEventListener("click", () => { manualPreviewScale = 1; applyPreviewZoom("actual"); });
-    zoomInBtn.addEventListener("click", () => { manualPreviewScale = Math.min((previewZoomMode === "fit" ? 0.75 : manualPreviewScale) + 0.1, 1.4); applyPreviewZoom("manual"); });
-    zoomOutBtn.addEventListener("click", () => { manualPreviewScale = Math.max((previewZoomMode === "fit" ? 0.75 : manualPreviewScale) - 0.1, 0.4); applyPreviewZoom("manual"); });
-    window.addEventListener("resize", () => { if (previewZoomMode === "fit") applyPreviewZoom("fit"); });
+    zoomInBtn.addEventListener("click", () => applyPreviewZoom("in"));
+    zoomOutBtn.addEventListener("click", () => applyPreviewZoom("out"));
+    actualSizeBtn.addEventListener("click", () => applyPreviewZoom("actual"));
+    window.addEventListener("resize", () => {
+      const modalEl = document.getElementById("modal");
+      if (previewZoomMode === "fit" && modalEl && modalEl.classList.contains("show")) applyPreviewZoom("fit");
+    });
 
 
     // Real editable Microsoft Word (.docx) generator — six genuinely different Word layouts
