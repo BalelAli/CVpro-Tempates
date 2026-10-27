@@ -383,7 +383,7 @@
 \n
 /* SIX NEW UNIQUE CV STRUCTURES */
 .card-layout-minimal{padding:20px!important;font-family:Arial,sans-serif}.card-layout-minimal .cv-top{display:block;border:0}.card-layout-minimal .cv-avatar{display:none}.card-layout-minimal .cv-name{font-size:19px;letter-spacing:1px}.card-layout-minimal .cv-role{font-size:8px;color:#667085}.minimal-rule{height:4px;background:#111827;margin:12px 0 16px}.minimal-section{font-size:7px;font-weight:800;letter-spacing:1.5px;margin:12px 0 7px}.card-layout-minimal .line{height:4px;border-radius:0;background:#d1d5db}
-.card-layout-dark{display:grid;grid-template-columns:72px 1fr!important;padding:0!important;overflow:hidden;background:#fff}.dark-sidebar{background:#111827;padding:16px 10px}.dark-avatar{width:34px;height:34px;border-radius:50%;background:#fff;margin:0 auto 18px}.dark-mini{height:5px;background:#667085;margin:10px 0;border-radius:3px}.dark-main{padding:20px 16px}.dark-main .cv-name{font-size:16px}.dark-main .cv-role{font-size:8px;color:#667085}.dark-main .line{height:4px;margin-top:10px}
+.card-layout-dark{display:grid;grid-template-columns:34% 66%!important;padding:0!important;overflow:hidden;background:#fff}.dark-sidebar{display:block!important;width:auto!important;min-width:0;background:#111827;padding:16px 10px}.dark-avatar{width:34px;height:34px;border-radius:50%;background:#fff;margin:0 auto 18px}.dark-mini{height:5px;background:#667085;margin:10px 0;border-radius:3px}.dark-main{padding:20px 16px}.dark-main .cv-name{font-size:16px}.dark-main .cv-role{font-size:8px;color:#667085}.dark-main .line{height:4px;margin-top:10px}
 .card-layout-timeline{padding:18px!important}.card-layout-timeline .cv-top{display:block;border:0;margin-bottom:10px}.card-layout-timeline .cv-avatar{display:none}.timeline-row{display:grid;grid-template-columns:28px 12px 1fr;gap:8px;align-items:start;margin:12px 0;font-size:7px}.timeline-row i{width:9px;height:9px;border:2px solid #059669;border-radius:50%;position:relative}.timeline-row i:after{content:"";position:absolute;top:9px;left:2px;width:2px;height:32px;background:#a7f3d0}.timeline-row b{font-size:7px}.timeline-row .line{height:3px;background:#d1d5db;margin-top:5px}
 .card-layout-tech2{padding:0!important;background:#0f172a;color:#fff;overflow:hidden}.tech2-top{background:#1e293b;padding:15px;display:flex;gap:10px;align-items:center}.tech2-top>span{font:800 9px monospace;background:#22c55e;color:#052e16;padding:7px}.tech2-top .cv-name{font:700 14px monospace}.tech2-top .cv-role{font:7px monospace;color:#94a3b8}.tech2-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px}.code-title{font:700 8px monospace;color:#22c55e;margin-bottom:7px}.card-layout-tech2 .line{height:4px;background:#334155;margin:6px 0}.card-layout-tech2 .short{width:65%}
 .card-layout-academic{padding:20px!important;font-family:Georgia,serif}.academic-name{text-align:center;font-size:18px;font-weight:700}.academic-role{text-align:center;font-size:7px;letter-spacing:1px;color:#667085;margin-top:4px}.academic-rule{border-top:3px double #374151;margin:12px 0}.academic-columns{display:grid;grid-template-columns:1fr 1fr;gap:18px}.academic-columns b{display:block;font-size:7px;margin:8px 0}.academic-columns .line{height:3px;background:#cbd5e1;margin:6px 0}
@@ -488,6 +488,11 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
 .site-footer-links{display:flex;gap:16px;flex-wrap:wrap}.site-footer-links a{color:#dbeafe;text-decoration:none;font-size:13px}
 @media(max-width:700px){.top-inner{padding:12px 0;gap:10px}.top nav{gap:4px}.top nav a{font-size:12px;padding:7px 8px}.site-footer-inner{align-items:flex-start;flex-direction:column}}
 
+
+/* Keep Dark Sidebar left panel visible at every screen size */
+.card-layout-dark{grid-template-columns:34% 66%!important}.card-layout-dark .dark-sidebar{display:block!important;background:#111827!important;min-height:100%}
+.pv-dark{display:grid!important;grid-template-columns:34% 66%!important;padding:0!important;overflow:hidden}.pv-dark>aside{display:block!important;background:#111827!important;color:#fff!important;padding:28px 20px!important}.pv-dark>main{padding:28px 24px!important;min-width:0}
+@media(max-width:700px){.card-layout-dark{grid-template-columns:34% 66%!important}.pv-dark{grid-template-columns:34% 66%!important}.pv-dark>aside{display:block!important;padding:18px 10px!important}.pv-dark>main{padding:18px 12px!important}}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/docx@9.5.1/dist/index.iife.js"></script>
@@ -876,30 +881,9 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
       D.Packer.toBlob(doc).then(blob=>{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=templateName.replace(/[^a-z0-9]+/gi,"-").toLowerCase()+"-cv.docx";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500);});
     }
 
-    // Free Word downloads: use the ready RTF files stored in /templates.
-    // This avoids depending on the external DOCX generator, so free downloads work reliably.
-    const freeWordFiles = {
-      "Modern Blue": "templates/modern-blue.rtf",
-      "Simple Green": "templates/simple-green.rtf",
-      "Classic CV": "templates/classic-cv.rtf",
-      "Minimal One Column": "templates/executive-minimal.rtf",
-      "Timeline CV": "templates/ats-elite.rtf",
-      "Academic CV": "templates/tech-minimal.rtf"
-    };
+    // Free Word downloads: generate the editable DOCX directly in the browser.
     document.querySelectorAll(".word-btn").forEach(btn=>{
-      btn.addEventListener("click",()=>{
-        const file = freeWordFiles[btn.dataset.word];
-        if (file) {
-          const a = document.createElement("a");
-          a.href = file;
-          a.download = file.split("/").pop();
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          return;
-        }
-        downloadDocx(btn.dataset.word);
-      });
+      btn.addEventListener("click",()=>downloadDocx(btn.dataset.word));
     });
 
     function renderDistinctPreview(cv, layout, role) {
