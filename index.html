@@ -1247,5 +1247,41 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
     })();
   </script>
 
+<script>
+/* CVPro stable controls patch */
+(function(){
+  function setup(){
+    var panel=document.querySelector(".modal-preview"), stage=document.getElementById("previewStage"), cv=document.getElementById("modalCv");
+    if(!panel||!stage||!cv) return;
+    var scale=1;
+    function apply(s){
+      scale=Math.max(.35,Math.min(1.5,s));
+      cv.style.transformOrigin="top left";
+      cv.style.transform="scale("+scale+")";
+      stage.style.width=(760*scale)+"px";
+      stage.style.height=(Math.max(cv.scrollHeight,900)*scale)+"px";
+      stage.style.margin="0 auto 12px";
+    }
+    function fit(){
+      var w=Math.max(220,panel.clientWidth-24);
+      apply(Math.min(w/760,1));
+    }
+    document.addEventListener("click",function(e){
+      var b=e.target.closest&&e.target.closest("#fitPreview,#zoomIn,#zoomOut,#actualSize");
+      if(!b) return;
+      e.preventDefault(); e.stopImmediatePropagation();
+      if(b.id==="fitPreview") fit();
+      else if(b.id==="zoomIn") apply(scale+.1);
+      else if(b.id==="zoomOut") apply(scale-.1);
+      else apply(1);
+    },true);
+    document.addEventListener("click",function(e){
+      if(e.target.closest&&e.target.closest("[data-preview],[data-buy]")) setTimeout(fit,100);
+    },true);
+    window.addEventListener("resize",function(){if(document.getElementById("modal")?.classList.contains("show")) fit();});
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",setup); else setup();
+})();
+</script>
 </body>
 </html>
