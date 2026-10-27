@@ -876,8 +876,30 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
       D.Packer.toBlob(doc).then(blob=>{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=templateName.replace(/[^a-z0-9]+/gi,"-").toLowerCase()+"-cv.docx";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500);});
     }
 
+    // Free Word downloads: use the ready RTF files stored in /templates.
+    // This avoids depending on the external DOCX generator, so free downloads work reliably.
+    const freeWordFiles = {
+      "Modern Blue": "templates/modern-blue.rtf",
+      "Simple Green": "templates/simple-green.rtf",
+      "Classic CV": "templates/classic-cv.rtf",
+      "Minimal One Column": "templates/executive-minimal.rtf",
+      "Timeline CV": "templates/ats-elite.rtf",
+      "Academic CV": "templates/tech-minimal.rtf"
+    };
     document.querySelectorAll(".word-btn").forEach(btn=>{
-      btn.addEventListener("click",()=>downloadDocx(btn.dataset.word));
+      btn.addEventListener("click",()=>{
+        const file = freeWordFiles[btn.dataset.word];
+        if (file) {
+          const a = document.createElement("a");
+          a.href = file;
+          a.download = file.split("/").pop();
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          return;
+        }
+        downloadDocx(btn.dataset.word);
+      });
     });
 
     function renderDistinctPreview(cv, layout, role) {
