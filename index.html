@@ -808,22 +808,24 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
     const nagadStatus = document.getElementById("nagadStatus");
     let selectedPremiumTemplate = "";
 
-    // Single preview controller: Fit Width + Zoom In/Out + 100%.
+    // Reliable preview zoom controller: delegated controls + responsive fit.
     const previewPanel = document.querySelector(".modal-preview");
     const previewStage = document.getElementById("previewStage");
     const previewCv = document.getElementById("modalCv");
-    const fitPreviewBtn = document.getElementById("fitPreview");
-    const zoomOutBtn = document.getElementById("zoomOut");
-    const zoomInBtn = document.getElementById("zoomIn");
-    const actualSizeBtn = document.getElementById("actualSize");
+    const previewButtons = {
+      fit: document.getElementById("fitPreview"),
+      out: document.getElementById("zoomOut"),
+      in: document.getElementById("zoomIn"),
+      actual: document.getElementById("actualSize")
+    };
     let previewZoomMode = "fit";
     let manualPreviewScale = 1;
 
     function applyPreviewZoom(mode) {
       if (!previewPanel || !previewStage || !previewCv) return;
       const baseWidth = 760;
-      const panelWidth = Math.max(260, previewPanel.clientWidth - 26);
-      const fitScale = Math.max(0.35, Math.min(panelWidth / baseWidth, 1));
+      const availableWidth = Math.max(1, previewPanel.clientWidth - 24);
+      const fitScale = Math.min(1, Math.max(0.25, availableWidth / baseWidth));
 
       if (mode === "fit") {
         previewZoomMode = "fit";
@@ -832,33 +834,60 @@ header.top{position:sticky;top:0;z-index:30;background:rgba(17,24,39,.97);backdr
         previewZoomMode = "actual";
         manualPreviewScale = 1;
       } else if (mode === "in") {
-        manualPreviewScale = Math.min(1.6, Math.max(0.35, manualPreviewScale + 0.1));
+        manualPreviewScale = Math.min(2, Math.max(0.25, manualPreviewScale + 0.1));
         previewZoomMode = "manual";
       } else if (mode === "out") {
-        manualPreviewScale = Math.max(0.35, manualPreviewScale - 0.1);
+        manualPreviewScale = Math.max(0.25, manualPreviewScale - 0.1);
         previewZoomMode = "manual";
       }
 
       const scale = previewZoomMode === "fit" ? fitScale : manualPreviewScale;
       previewCv.style.width = baseWidth + "px";
-      previewCv.style.transformOrigin = "top left";
+      previewCv.style.maxWidth = "none";
       previewCv.style.transform = "scale(" + scale + ")";
+      previewCv.style.transformOrigin = "top left";
       previewStage.style.width = Math.ceil(baseWidth * scale) + "px";
-      previewStage.style.height = Math.ceil(Math.max(previewCv.scrollHeight, previewCv.offsetHeight, 900) * scale) + "px";
-      fitPreviewBtn.classList.toggle("active", previewZoomMode === "fit");
-      actualSizeBtn.classList.toggle("active", previewZoomMode === "actual");
+      const contentHeight = Math.max(previewCv.scrollHeight, previewCv.offsetHeight, 900);
+      previewStage.style.height = Math.ceil(contentHeight * scale) + "px";
+      previewStage.style.marginLeft = "auto";
+      previewStage.style.marginRight = "auto";
+
+      Object.entries(previewButtons).forEach(([key, button]) => {
+        if (button) button.classList.toggle("active",
+          (key === "fit" && previewZoomMode === "fit") ||
+          (key === "actual" && previewZoomMode === "actual"));
+      });
     }
 
     window.applyPreviewZoom = applyPreviewZoom;
-    fitPreviewBtn.addEventListener("click", () => applyPreviewZoom("fit"));
-    zoomInBtn.addEventListener("click", () => applyPreviewZoom("in"));
-    zoomOutBtn.addEventListener("click", () => applyPreviewZoom("out"));
-    actualSizeBtn.addEventListener("click", () => applyPreviewZoom("actual"));
-    window.addEventListener("resize", () => {
-      const modalEl = document.getElementById("modal");
-      if (previewZoomMode === "fit" && modalEl && modalEl.classList.contains("show")) applyPreviewZoom("fit");
+
+    // Delegation keeps the controls working even when preview content is rebuilt.
+    document.addEventListener("click", function(event) {
+      const button = event.target.closest && event.target.closest("#fitPreview, #zoomOut, #zoomIn, #actualSize");
+      if (!button) return;
+      event.preventDefault();
+      if (button.id === "fitPreview") applyPreviewZoom("fit");
+      else if (button.id === "zoomOut") applyPreviewZoom("out");
+      else if (button.id === "zoomIn") applyPreviewZoom("in");
+      else if (button.id === "actualSize") applyPreviewZoom("actual");
     });
 
+    window.addEventListener("resize", function() {
+      const modalEl = document.getElementById("modal");
+      if (previewZoomMode === "fit" && modalEl && modalEl.classList.contains("show")) {
+        applyPreviewZoom("fit");
+      }
+    });
+
+    if (window.ResizeObserver && previewPanel) {
+      const previewResizeObserver = new ResizeObserver(function() {
+        const modalEl = document.getElementById("modal");
+        if (previewZoomMode === "fit" && modalEl && modalEl.classList.contains("show")) {
+          applyPreviewZoom("fit");
+        }
+      });
+      previewResizeObserver.observe(previewPanel);
+    }
 
     // Real editable Microsoft Word (.docx) generator — six genuinely different Word layouts
     const wordLayouts={"Modern Blue":"modern","Executive Purple":"executive","Simple Green":"ats","Professional Pro":"corporate","Classic CV":"classic","Creative Green":"creative","Minimal One Column":"minimal","Dark Sidebar":"dark","Timeline CV":"timeline","Tech Developer":"tech2","Academic CV":"academic","Portfolio Modern":"portfolio2"};
